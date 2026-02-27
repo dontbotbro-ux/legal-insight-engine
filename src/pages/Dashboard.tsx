@@ -32,6 +32,12 @@ type LegalEntity = {
   page: number;
 };
 
+type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+};
+
 const Dashboard = () => {
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -46,6 +52,9 @@ const Dashboard = () => {
   const [dates, setDates] = useState<LegalEntity[]>([]);
   const [extracting, setExtracting] = useState(false);
   const [extractError, setExtractError] = useState<string | null>(null);
+  const [docText, setDocText] = useState<string>("");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [answering, setAnswering] = useState(false);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -76,6 +85,8 @@ const Dashboard = () => {
       setCourts([]);
       setDates([]);
       setExtractError(null);
+      setDocText("");
+      setMessages([]);
       return;
     }
 
@@ -102,11 +113,15 @@ const Dashboard = () => {
         const captionRegex = /([A-Z][A-Za-z.&\s]+?)\s+v\.?\s+([A-Z][A-Za-z.&\s]+?)(?=,|\n|$)/;
         const courtRegex = /\b(Supreme Court|Court of Appeals|District Court|High Court|Appellate Division|Tribunal)\b/gi;
 
+        let combinedText = "";
+
         const numPages = pdf.numPages;
         for (let pageNum = 1; pageNum <= numPages; pageNum++) {
           const page = await pdf.getPage(pageNum);
           const textContent = await page.getTextContent();
           const text = textContent.items.map((item: any) => item.str).join(" ");
+
+          combinedText += text + "\n\n";
 
           // Case caption (people)
           const captionMatch = text.match(captionRegex);
@@ -180,6 +195,7 @@ const Dashboard = () => {
         setPeople(Array.from(peopleSet.values()));
         setCourts(Array.from(courtSet.values()));
         setDates(Array.from(dateSet.values()));
+        setDocText(combinedText);
       } catch (err) {
         console.error(err);
         setExtractError("We couldn't analyze this PDF. Please try another file.");
@@ -199,6 +215,48 @@ const Dashboard = () => {
       // but we keep this hook in case we add cancellation later.
     }
   }, [file]);
+
+  const handleChatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+    const trimmed = chatInput.trim();
+    if (!trimmed) return;
+
+    const userMessage: ChatMessage = {
+      id: `m-${Date.now()}-u`,
+      role: "user",
+      content: trimmed,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setChatInput("");
+
+    if (!docText) {
+      const assistant: ChatMessage = {
+        id: `m-${Date.now()}-a`,
+        role: "assistant",
+        content:
+          "I'm still processing the document text. Please wait a moment and then try your question again.",
+      };
+      setMessages((prev) => [...prev, assistant]);
+      return;
+    }
+
+    const wantsSummary = /summary|summarise|summarize|overview|briefly describe/i.test(trimmed);
+    setAnswering(true);
+
+    const assistantContent = wantsSummary
+      ? summarizeDocument(docText)
+      : "This prototype currently focuses on summarizing the loaded PDF. Try asking me to “summarize this document” or “give me an overview of this filing.”";
+
+    const assistant: ChatMessage = {
+      id: `m-${Date.now()}-a`,
+      role: "assistant",
+      content: assistantContent,
+    };
+    setMessages((prev) => [...prev, assistant]);
+    setAnswering(false);
+  };
 
   return (
     <div className="min-h-screen bg-navy-deep flex flex-col">
@@ -383,12 +441,33 @@ const Dashboard = () => {
                 </p>
               </Card>
             )}
+
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}
+              >
+                <Card
+                  className={
+                    msg.role === "user"
+                      ? "max-w-[85%] p-3 bg-primary text-primary-foreground"
+                      : "max-w-[85%] p-3 bg-muted/60"
+                  }
+                >
+                  <p className="text-sm leading-relaxed">{msg.content}</p>
+                </Card>
+              </div>
+            ))}
+
+            {answering && (
+              <p className="text-xs text-muted-foreground italic px-1">Analyzing the document…</p>
+            )}
           </div>
 
           {/* Chat input */}
           <div className="p-4 border-t border-border">
             <form
-              onSubmit={(e) => { e.preventDefault(); setChatInput(""); }}
+              onSubmit={handleChatSubmit}
               className="flex gap-2"
             >
               <Input
@@ -408,20 +487,6 @@ const Dashboard = () => {
     </div>
   );
 };
-
-const MetricSection = ({ icon: Icon, title, items }: { icon: any; title: string; items: string[] }) => (
-  <div className="mb-6">
-    <div className="flex items-center gap-2 mb-2">
-      <Icon className="h-4 w-4 text-gold" />
-      <span className="text-sm font-semibold text-foreground">{title}</span>
-    </div>
-    <ul className="space-y-1.5">
-      {items.map((item, i) => (
-        <li key={i} className="text-sm text-muted-foreground pl-6">{item}</li>
-      ))}
-    </ul>
-  </div>
-);
 
 const SidebarHint = ({ label }: { label: string }) => (
   <p className="text-[11px] text-muted-foreground/80 italic px-1">{label}</p>
@@ -468,5 +533,25 @@ const EntitySection = ({
     )}
   </div>
 );
+
+const summarizeDocument = (fullText: string): string => {
+  const text = fullText.replace(/\s+/g, " ").trim();
+  if (!text) {
+    return "I couldn’t read any text from this PDF to summarize.";
+  }
+
+  const sentences = text.split(/(?<=[.!?])\s+/);
+
+  const maxSentences = 6;
+  const summarySentences = sentences.slice(0, maxSentences);
+  let summary = summarySentences.join(" ");
+
+  const maxChars = 1200;
+  if (summary.length > maxChars) {
+    summary = summary.slice(0, maxChars).trimEnd() + "…";
+  }
+
+  return `Here’s a high-level summary of the loaded document, based purely on its text:\n\n${summary}`;
+};
 
 export default Dashboard;
