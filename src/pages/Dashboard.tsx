@@ -39,6 +39,13 @@ type ChatMessage = {
   content: string;
 };
 
+type InsightMetrics = {
+  governingLaw: string | null;
+  keyParties: string | null;
+  terminationNotice: string | null;
+  liabilityCap: string | null;
+};
+
 const Dashboard = () => {
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -56,6 +63,12 @@ const Dashboard = () => {
   const [docText, setDocText] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [answering, setAnswering] = useState(false);
+  const [metrics, setMetrics] = useState<InsightMetrics>({
+    governingLaw: null,
+    keyParties: null,
+    terminationNotice: null,
+    liabilityCap: null,
+  });
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -88,6 +101,12 @@ const Dashboard = () => {
       setExtractError(null);
       setDocText("");
       setMessages([]);
+      setMetrics({
+        governingLaw: null,
+        keyParties: null,
+        terminationNotice: null,
+        liabilityCap: null,
+      });
       return;
     }
 
@@ -217,6 +236,63 @@ const Dashboard = () => {
     }
   }, [file]);
 
+  // Derive key insight metrics from the extracted text + entities.
+  useEffect(() => {
+    if (!docText) {
+      setMetrics({
+        governingLaw: null,
+        keyParties: null,
+        terminationNotice: null,
+        liabilityCap: null,
+      });
+      return;
+    }
+
+    const text = docText.replace(/\s+/g, " ");
+
+    // Governing law
+    let governingLaw: string | null = null;
+    const lawMatch =
+      text.match(/governed by the laws of\s+([A-Za-z\s]+?)(?:,|\.)/i) ??
+      text.match(/governing law[:\s]+([A-Za-z\s]+?)(?:,|\.)/i);
+    if (lawMatch) {
+      governingLaw = lawMatch[1].trim();
+    }
+
+    // Key parties from extracted people
+    let keyParties: string | null = null;
+    if (people.length > 0) {
+      const uniqueNames = Array.from(new Set(people.map((p) => p.name)));
+      keyParties = uniqueNames.slice(0, 4).join(" · ");
+    }
+
+    // Termination notice
+    let terminationNotice: string | null = null;
+    const termMatch = text.match(
+      /(at least\s+)?(\d+)\s+(day|days|month|months)\s+(?:prior to|before)\s+(?:termination|ending)/i,
+    );
+    if (termMatch) {
+      terminationNotice = `${termMatch[2]} ${termMatch[3]}`;
+    }
+
+    // Liability cap
+    let liabilityCap: string | null = null;
+    const capMatch =
+      text.match(/liability (?:shall )?not exceed\s+([\$€£]?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
+      text.match(/cap on (?:the )?liability\s+of\s+([\$€£]?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
+      text.match(/liability cap[:\s]+([\$€£]?[0-9,\.]+\s*(?:million|thousand)?)/i);
+    if (capMatch) {
+      liabilityCap = capMatch[1].trim();
+    }
+
+    setMetrics({
+      governingLaw,
+      keyParties,
+      terminationNotice,
+      liabilityCap,
+    });
+  }, [docText, people]);
+
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
@@ -263,6 +339,83 @@ const Dashboard = () => {
         setAnswering(false);
       }
     })();
+  };
+
+  const runQuickAction = (label: string, instruction: string) => {
+    if (!file) return;
+
+    const content = `Quick Action – ${label}.\n\n${instruction}`;
+    const userMessage: ChatMessage = {
+      id: `m-${Date.now()}-qa`,
+      role: "user",
+      content,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+
+    void (async () => {
+      setAnswering(true);
+      try {
+        const historyForModel: HybridChatMessage[] = [...messages, userMessage].map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+        const answer = await getHybridAnswer({
+          history: historyForModel,
+          pdfText: docText || undefined,
+        });
+
+        const assistant: ChatMessage = {
+          id: `m-${Date.now()}-qa-a`,
+          role: "assistant",
+          content: answer,
+        };
+        setMessages((prev) => [...prev, assistant]);
+      } catch {
+        const assistant: ChatMessage = {
+          id: `m-${Date.now()}-qa-a`,
+          role: "assistant",
+          content:
+            "I ran into an error while running that quick action. Please try again in a moment.",
+        };
+        setMessages((prev) => [...prev, assistant]);
+      } finally {
+        setAnswering(false);
+      }
+    })();
+  };
+
+  const handleDownloadAnalysis = () => {
+    if (!messages.length) return;
+    const lines: string[] = [];
+    lines.push("# Document Analysis");
+    if (file) {
+      lines.push("");
+      lines.push(`**Document:** ${file.name}`);
+    }
+    lines.push("");
+    lines.push("## Chat Transcript");
+    lines.push("");
+
+    messages.forEach((m) => {
+      const prefix = m.role === "user" ? "### Attorney" : "### Senior Paralegal";
+      lines.push(prefix);
+      lines.push("");
+      lines.push(m.content);
+      lines.push("");
+    });
+
+    const markdown = lines.join("\n");
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file ? `${file.name.replace(/\.[^.]+$/, "")}-analysis.md` : "analysis.md";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -328,7 +481,7 @@ const Dashboard = () => {
               </div>
             </section>
 
-            <section>
+            <section className="mb-6">
               <div className="flex items-center gap-2 mb-2">
                 <Landmark className="h-4 w-4 text-gold" />
                 <span className="text-sm font-semibold">Key Legal Entities</span>
@@ -355,6 +508,70 @@ const Dashboard = () => {
                   items={dates}
                   onItemClick={(d) => setActivePage(d.page)}
                 />
+              </div>
+            </section>
+
+            <section>
+              <p className="text-[11px] text-muted-foreground/80 mb-2 uppercase tracking-[0.16em]">
+                Quick Actions
+              </p>
+              <div className="space-y-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start border-gold/40 bg-navy-deep/40 hover:bg-gold/15 text-[11px]"
+                  disabled={!file || answering}
+                  onClick={() =>
+                    runQuickAction(
+                      "Flag Risks",
+                      "Act as a senior commercial paralegal. Scan the uploaded document and list any clauses that are one-sided, unusually risky, or materially unfavorable to our client. Group them by topic, quote the key language briefly, and include page/section references where possible.",
+                    )
+                  }
+                >
+                  Flag Risks
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start border-gold/40 bg-navy-deep/40 hover:bg-gold/15 text-[11px]"
+                  disabled={!file || answering}
+                  onClick={() =>
+                    runQuickAction(
+                      "Case Timeline",
+                      "Using the document text and any dates or names you can see, build a concise chronological table of events. Each row should include: date (or approximate), actor/party, and a short description, with page citations where possible.",
+                    )
+                  }
+                >
+                  Case Timeline
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start border-gold/40 bg-navy-deep/40 hover:bg-gold/15 text-[11px]"
+                  disabled={!file || answering}
+                  onClick={() =>
+                    runQuickAction(
+                      "Opposing Counsel Questions",
+                      "From the perspective of a sharp opposing counsel, generate three tough, specific questions or challenges you would raise about this document. Focus on ambiguities, risk allocations, missing protections, or inconsistent definitions, and reference the relevant sections.",
+                    )
+                  }
+                >
+                  Opposing Counsel
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start border-gold/40 bg-navy-deep/40 hover:bg-gold/15 text-[11px]"
+                  disabled={!file || answering}
+                  onClick={() =>
+                    runQuickAction(
+                      "Executive Summary",
+                      "Prepare a one-page style executive summary of this document for a non-lawyer business client. Use short sections and bullets: purpose, key parties, term/termination, economics, major risks, and anything unusual. Avoid legalese and include page references in brackets where helpful.",
+                    )
+                  }
+                >
+                  Executive Summary
+                </Button>
               </div>
             </section>
           </aside>
@@ -433,61 +650,99 @@ const Dashboard = () => {
             <p className="text-xs text-muted-foreground mt-0.5">Grounded answers with source citations</p>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {/* System message */}
-            <Card className="p-4 bg-muted/50 border-border">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Upload a legal document to begin. I'll analyze its contents and answer your questions with precise <span className="text-gold font-medium">[Page X]</span> citations.
-              </p>
-            </Card>
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Insight cards + messages scroll independently */}
+            <div className="p-4 border-b border-border bg-card">
+              <div className="grid grid-cols-2 gap-3">
+                <InsightCard
+                  label="Governing Law"
+                  value={metrics.governingLaw}
+                  placeholder="Not detected yet"
+                />
+                <InsightCard
+                  label="Key Parties"
+                  value={metrics.keyParties}
+                  placeholder="Parties not detected"
+                />
+                <InsightCard
+                  label="Termination Notice"
+                  value={metrics.terminationNotice}
+                  placeholder="No notice period found"
+                />
+                <InsightCard
+                  label="Liability Cap"
+                  value={metrics.liabilityCap}
+                  placeholder="No cap language detected"
+                />
+              </div>
+            </div>
 
-            {file && (
-              <Card className="p-4 bg-primary/5 border-gold/20">
-                <p className="text-sm text-foreground leading-relaxed">
-                  <span className="font-semibold">Document loaded:</span> {file.name}. You can now ask questions about its contents. All responses will be grounded in the document.
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {/* System message */}
+              <Card className="p-4 bg-muted/50 border-border">
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Upload a legal document to begin. I&apos;ll analyze its contents and answer your questions with precise <span className="text-gold font-medium">[Page X]</span> citations.
                 </p>
               </Card>
-            )}
 
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}
-              >
-                <Card
-                  className={
-                    msg.role === "user"
-                      ? "max-w-[85%] p-3 bg-primary text-primary-foreground"
-                      : "max-w-[85%] p-3 bg-muted/60"
-                  }
-                >
-                  <p className="text-sm leading-relaxed">{msg.content}</p>
+              {file && (
+                <Card className="p-4 bg-primary/5 border-gold/20">
+                  <p className="text-sm text-foreground leading-relaxed">
+                    <span className="font-semibold">Document loaded:</span> {file.name}. You can ask about clauses, risks, timelines, or run quick actions in the sidebar.
+                  </p>
                 </Card>
+              )}
+
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}
+                >
+                  <Card
+                    className={
+                      msg.role === "user"
+                        ? "max-w-[85%] p-3 bg-primary text-primary-foreground"
+                        : "max-w-[85%] p-3 bg-muted/60"
+                    }
+                  >
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                  </Card>
+                </div>
+              ))}
+
+              {answering && (
+                <p className="text-xs text-muted-foreground italic px-1">Analyzing the document…</p>
+              )}
+            </div>
+
+            {/* Chat input + export */}
+            <div className="border-t border-border p-3 space-y-2">
+              <form
+                onSubmit={handleChatSubmit}
+                className="flex gap-2"
+              >
+                <Input
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder={file ? "Ask a question about this document..." : "Upload a PDF first..."}
+                  disabled={!file}
+                  className="flex-1"
+                />
+                <Button type="submit" size="icon" disabled={!file || !chatInput.trim() || answering} className="bg-primary text-primary-foreground hover:bg-navy-light">
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+              <div className="flex justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!messages.length}
+                  onClick={handleDownloadAnalysis}
+                >
+                  Download Analysis (Markdown)
+                </Button>
               </div>
-            ))}
-
-            {answering && (
-              <p className="text-xs text-muted-foreground italic px-1">Analyzing the document…</p>
-            )}
-          </div>
-
-          {/* Chat input */}
-          <div className="p-4 border-t border-border">
-            <form
-              onSubmit={handleChatSubmit}
-              className="flex gap-2"
-            >
-              <Input
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                placeholder={file ? "Ask about the document..." : "Upload a PDF first..."}
-                disabled={!file}
-                className="flex-1"
-              />
-              <Button type="submit" size="icon" disabled={!file || !chatInput.trim()} className="bg-primary text-primary-foreground hover:bg-navy-light">
-                <Send className="h-4 w-4" />
-              </Button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -539,6 +794,23 @@ const EntitySection = ({
       </ul>
     )}
   </div>
+);
+
+const InsightCard = ({
+  label,
+  value,
+  placeholder,
+}: {
+  label: string;
+  value: string | null;
+  placeholder: string;
+}) => (
+  <Card className="p-3 bg-card border-border/70">
+    <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-1">{label}</p>
+    <p className="text-sm font-serif text-foreground min-h-[1.5rem]">
+      {value ?? <span className="text-muted-foreground text-xs">{placeholder}</span>}
+    </p>
+  </Card>
 );
 
 export default Dashboard;
