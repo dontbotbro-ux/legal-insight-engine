@@ -40,13 +40,13 @@ export async function getHybridAnswer(params: {
   history: HybridChatMessage[];
   pdfText?: string;
 }): Promise<string> {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const apiKey = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_OPENAI_API_KEY;
   if (!apiKey) {
-    return "The AI backend is not configured (missing OpenAI API key).";
+    return "The AI backend is not configured (missing Groq/OpenAI API key).";
   }
 
   const payload = {
-    model: "gpt-4.1-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
       ...(params.pdfText
@@ -66,7 +66,7 @@ export async function getHybridAnswer(params: {
   };
 
   try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
