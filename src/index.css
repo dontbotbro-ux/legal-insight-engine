@@ -106,4 +106,13 @@
   .text-gold {
     color: hsl(var(--gold));
   }
+  .text-cream {
+    color: #fdf7ec;
+  }
+  .bg-cream {
+    background-color: #fdf7ec; /* soft cream for reading surfaces */
+  }
+  .bg-navy-deep {
+    background-color: #0A192F; /* deep navy shell */
+  }
 }
