@@ -65,28 +65,42 @@ export async function getHybridAnswer(params: {
     temperature: 0.2,
   };
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(payload),
+    });
 
-  if (!res.ok) {
-    return "I ran into an error while trying to contact the AI service. Please try again in a moment.";
+    if (!res.ok) {
+      let details = "";
+      try {
+        const errJson = (await res.json()) as { error?: { message?: string; type?: string } };
+        if (errJson?.error?.message) {
+          details = ` (${errJson.error.message})`;
+        }
+      } catch {
+        // ignore JSON parse errors, fall back to status text
+      }
+
+      return `The AI service returned an error (status ${res.status}${details}).`;
+    }
+
+    const data = (await res.json()) as {
+      choices: { message?: { content?: string } }[];
+    };
+
+    const content = data.choices[0]?.message?.content?.trim();
+    if (!content) {
+      return "I couldn't generate a useful answer. Please try rephrasing your question.";
+    }
+
+    return content;
+  } catch (err) {
+    return "I couldn't reach the AI service (network error). Please check your connection and try again.";
   }
-
-  const data = (await res.json()) as {
-    choices: { message?: { content?: string } }[];
-  };
-
-  const content = data.choices[0]?.message?.content?.trim();
-  if (!content) {
-    return "I couldn't generate a useful answer. Please try rephrasing your question.";
-  }
-
-  return content;
 }
 
