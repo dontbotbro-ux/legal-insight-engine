@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { pdfjsLib } from "@/pdf";
+import { getHybridAnswer, type HybridChatMessage } from "@/lib/hybridChat";
 
 type TimelineEvent = {
   id: string;
@@ -231,31 +232,37 @@ const Dashboard = () => {
     setMessages((prev) => [...prev, userMessage]);
     setChatInput("");
 
-    if (!docText) {
-      const assistant: ChatMessage = {
-        id: `m-${Date.now()}-a`,
-        role: "assistant",
-        content:
-          "I'm still processing the document text. Please wait a moment and then try your question again.",
-      };
-      setMessages((prev) => [...prev, assistant]);
-      return;
-    }
+    void (async () => {
+      setAnswering(true);
+      try {
+        const historyForModel: HybridChatMessage[] = [...messages, userMessage].map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
 
-    const wantsSummary = /summary|summarise|summarize|overview|briefly describe/i.test(trimmed);
-    setAnswering(true);
+        const answer = await getHybridAnswer({
+          history: historyForModel,
+          pdfText: docText || undefined,
+        });
 
-    const assistantContent = wantsSummary
-      ? summarizeDocument(docText)
-      : "This prototype currently focuses on summarizing the loaded PDF. Try asking me to “summarize this document” or “give me an overview of this filing.”";
-
-    const assistant: ChatMessage = {
-      id: `m-${Date.now()}-a`,
-      role: "assistant",
-      content: assistantContent,
-    };
-    setMessages((prev) => [...prev, assistant]);
-    setAnswering(false);
+        const assistant: ChatMessage = {
+          id: `m-${Date.now()}-a`,
+          role: "assistant",
+          content: answer,
+        };
+        setMessages((prev) => [...prev, assistant]);
+      } catch (err) {
+        const assistant: ChatMessage = {
+          id: `m-${Date.now()}-a`,
+          role: "assistant",
+          content:
+            "I ran into an error while trying to answer. Please try again in a moment.",
+        };
+        setMessages((prev) => [...prev, assistant]);
+      } finally {
+        setAnswering(false);
+      }
+    })();
   };
 
   return (
@@ -533,25 +540,5 @@ const EntitySection = ({
     )}
   </div>
 );
-
-const summarizeDocument = (fullText: string): string => {
-  const text = fullText.replace(/\s+/g, " ").trim();
-  if (!text) {
-    return "I couldn’t read any text from this PDF to summarize.";
-  }
-
-  const sentences = text.split(/(?<=[.!?])\s+/);
-
-  const maxSentences = 6;
-  const summarySentences = sentences.slice(0, maxSentences);
-  let summary = summarySentences.join(" ");
-
-  const maxChars = 1200;
-  if (summary.length > maxChars) {
-    summary = summary.slice(0, maxChars).trimEnd() + "…";
-  }
-
-  return `Here’s a high-level summary of the loaded document, based purely on its text:\n\n${summary}`;
-};
 
 export default Dashboard;
