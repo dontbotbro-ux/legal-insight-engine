@@ -87,4 +87,5 @@ Configure Environment:
 Create a .env file with your GROQ_API_KEY and OPENAI_API_KEY.
 
 Run Development Server:
+
 Bash:npm run dev
