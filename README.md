@@ -6,7 +6,6 @@
 
 ```mermaid
 flowchart TD
-    %% Layers
     subgraph UI [Frontend]
         A[Next.js App]
     end
@@ -22,7 +21,6 @@ flowchart TD
         F[(intelligence.json)]
     end
 
-    %% Flow
     A --> B
     B --> C
     B -.-> D
@@ -31,14 +29,13 @@ flowchart TD
     F --> E
     E --> A
 
-    %% Styles
-    classDef orange fill:#f96,stroke:#333,stroke-width:2px
-    classDef blue fill:#69f,stroke:#333,stroke-width:2px
-    classDef green fill:#9f6,stroke:#333,stroke-width:2px
+    classDef orange fill:#f96,stroke:#333,stroke-width:2px;
+    classDef blue fill:#69f,stroke:#333,stroke-width:2px;
+    classDef green fill:#9f6,stroke:#333,stroke-width:2px;
 
-    class B orange
-    class E blue
-    class F green
+    class B orange;
+    class E blue;
+    class F green;
 
 This project is built with:
 
