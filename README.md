@@ -64,24 +64,25 @@ This matrix ensures 100% alignment between initial stakeholder requirements and 
 
 ## 🛠️ Technical Stack
 Frontend: Vite, React, TypeScript
+
 UI/UX: shadcn-ui, Tailwind CSS
+
 Backend Protocol: FastMCP (Python)
+
 Inference LPUs: Groq (Llama 3.3 70B)
+
 Deployment: Vercel
 
 ## ⚙️ Setup & Installation
 Clone the repository:
+Bash: git clone [https://github.com/your-username/LawyerBot.git](https://github.com/your-username/LawyerBot.git)
 
-Bash
-git clone [https://github.com/your-username/LawyerBot.git](https://github.com/your-username/LawyerBot.git)
 Install dependencies:
 
-Bash
-npm install
+Bash: npm install
+
 Configure Environment:
 Create a .env file with your GROQ_API_KEY and OPENAI_API_KEY.
 
 Run Development Server:
-
-Bash
-npm run dev
+Bash:npm run dev
