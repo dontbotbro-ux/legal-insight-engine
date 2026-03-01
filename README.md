@@ -2,8 +2,7 @@
 
 ## Project info
 
-**URL**: https://legal-insight-engine-main.vercel.app
-
+URL: https://legal-insight-engine-main.vercel.app
 ```mermaid
 flowchart TD
     subgraph UI [Frontend Layer]
@@ -36,6 +35,7 @@ flowchart TD
     class B orange;
     class E blue;
     class F green;
+```
 
 This project is built with:
 
