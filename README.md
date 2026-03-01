@@ -58,10 +58,3 @@ flowchart TD
     class E blue;
     class F green;
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
