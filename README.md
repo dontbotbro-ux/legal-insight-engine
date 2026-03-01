@@ -4,27 +4,25 @@
 
 **URL**: https://legal-insight-engine-main.vercel.app
 
-
-
 ```mermaid
 flowchart TD
-    %% Define Nodes
-    subgraph User_Layer [User Experience]
-        A[Next.js Web App]
+    %% Layers
+    subgraph UI [Frontend]
+        A[Next.js App]
     end
 
-    subgraph Logic_Layer [Intelligence & Reasoning]
+    subgraph Logic [Intelligence]
         B{Router}
         C[Groq Llama 3.3]
         D[OpenAI Fallback]
     end
 
-    subgraph Data_Layer [MCP Legal Backend]
+    subgraph Data [Legal Backend]
         E[FastMCP Server]
         F[(intelligence.json)]
     end
 
-    %% Define Flow
+    %% Flow
     A --> B
     B --> C
     B -.-> D
@@ -33,14 +31,14 @@ flowchart TD
     F --> E
     E --> A
 
-    %% Define Styles
-    classDef router fill:#f96,stroke:#333,stroke-width:2px
-    classDef server fill:#69f,stroke:#333,stroke-width:2px
-    classDef data fill:#9f6,stroke:#333,stroke-width:2px
+    %% Styles
+    classDef orange fill:#f96,stroke:#333,stroke-width:2px
+    classDef blue fill:#69f,stroke:#333,stroke-width:2px
+    classDef green fill:#9f6,stroke:#333,stroke-width:2px
 
-    class B router
-    class E server
-    class F data
+    class B orange
+    class E blue
+    class F green
 
 This project is built with:
 
