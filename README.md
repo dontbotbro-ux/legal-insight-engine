@@ -62,14 +62,14 @@ This matrix ensures 100% alignment between initial stakeholder requirements and 
 | **REQ-04** | **UX** | Real-time Observability | `System Health Monitor` Component | 📡 |
 | **REQ-05** | **Business** | Token Cost Optimization | Context Pruning & Prompt Engineering | 💰 |
 
-🛠️ Technical Stack
+###🛠️ Technical Stack
 Frontend: Vite, React, TypeScript
 UI/UX: shadcn-ui, Tailwind CSS
 Backend Protocol: FastMCP (Python)
 Inference LPUs: Groq (Llama 3.3 70B)
 Deployment: Vercel
 
-⚙️ Setup & Installation
+###⚙️ Setup & Installation
 Clone the repository:
 
 Bash
