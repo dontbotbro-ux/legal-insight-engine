@@ -6,24 +6,24 @@
 
 ```mermaid
 flowchart TD
-    subgraph UI [Frontend]
-        A[Next.js App]
+    subgraph UI [Frontend Layer]
+        A[Next.js Web App]
     end
 
-    subgraph Logic [Intelligence]
+    subgraph Logic [Intelligence Layer]
         B{Router}
         C[Groq Llama 3.3]
         D[OpenAI Fallback]
     end
 
-    subgraph Data [Legal Backend]
+    subgraph Data [Legal Engine]
         E[FastMCP Server]
         F[(intelligence.json)]
     end
 
     A --> B
-    B --> C
-    B -.-> D
+    B -->|Primary| C
+    B -.->|Fallback| D
     C & D --> E
     E --> F
     F --> E
