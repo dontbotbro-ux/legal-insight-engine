@@ -51,10 +51,8 @@ flowchart TD
     class F green;
 ```
 
-📋 Requirements Traceability Matrix (RTM)
-This matrix ensures 100% alignment between initial stakeholder requirements and the final technical deployment, preventing scope creep and ensuring business value.
-
 ### 📋 Requirements Traceability Matrix (RTM)
+This matrix ensures 100% alignment between initial stakeholder requirements and the final technical deployment, preventing scope creep and ensuring business value.
 
 | ID | Category | Requirement | Technical Implementation | Status |
 | :--- | :--- | :--- | :--- | :---: |
