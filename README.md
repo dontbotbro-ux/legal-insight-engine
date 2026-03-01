@@ -1,9 +1,3 @@
-# Welcome to LawyerBot
-
-## Project info
-
-URL: https://legal-insight-engine-main.vercel.app
-
 This project is built with:
 
 - Vite
@@ -63,3 +57,11 @@ flowchart TD
     class B orange;
     class E blue;
     class F green;
+
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
