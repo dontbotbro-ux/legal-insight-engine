@@ -51,9 +51,12 @@ flowchart TD
     class F green;
 ```
 
-Req ID,Business Requirement,Technical Implementation,Validation Method
-FR-01,Rapid Legal Data Retrieval,FastMCP Server with indexed intelligence.json,Tool-call latency < 200ms
-FR-02,High-Inference Reasoning,Groq Llama 3.3 (LPU Inference),Semantic accuracy check
-NFR-01,System Resilience,Multi-Model Fallback (OpenAI GPT-5.3),429 Error Trigger Test
-NFR-02,Observability,Real-time Health Monitor Component,Dashboard status heartbeat
-NFR-03,Cost Efficiency,Context Pruning & Token Budgeting,API usage log analysis
+### 📋 Requirements Traceability Matrix (RTM)
+
+| ID | Category | Requirement | Technical Implementation | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **REQ-01** | **Core** | Rapid Legal Data Retrieval | `FastMCP Server` + `intelligence.json` | ✅ |
+| **REQ-02** | **Logic** | High-Inference Reasoning | `Groq Llama-3.3` (LPU Inference) | ✅ |
+| **REQ-03** | **Resilience** | API Failover Protection | `OpenAI GPT-5.3` Circuit Breaker | 🛡️ |
+| **REQ-04** | **UX** | Real-time Observability | `System Health Monitor` Component | 📡 |
+| **REQ-05** | **Business** | Token Cost Optimization | Context Pruning & Prompt Engineering | 💰 |
