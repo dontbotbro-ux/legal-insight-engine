@@ -1,11 +1,3 @@
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
 # ⚖️ LawyerBot: Distributed Legal Intelligence Engine
 
 [![Architecture](https://img.shields.io/badge/Architecture-MCP--Distributed-blue)](https://modelcontextprotocol.io)
@@ -58,3 +50,39 @@ flowchart TD
     class E blue;
     class F green;
 
+📋 Requirements Traceability Matrix (RTM)
+This matrix ensures 100% alignment between initial stakeholder requirements and the final technical deployment, preventing scope creep and ensuring business value.
+
+ID	Category	Requirement	Technical Implementation	Status
+REQ-01	Core	Rapid Legal Data Retrieval	FastMCP Server + intelligence.json	✅
+REQ-02	Logic	High-Inference Reasoning	Groq Llama-3.3 (LPU Inference)	✅
+REQ-03	Resilience	API Failover Protection	OpenAI GPT-5.3 Circuit Breaker	🛡️
+REQ-04	UX	Real-time Observability	System Health Monitor Component	📡
+REQ-05	Business	Token Cost Optimization	Context Pruning & Prompt Engineering	💰
+🛠️ Technical Stack
+Frontend: Vite, React, TypeScript
+
+UI/UX: shadcn-ui, Tailwind CSS
+
+Backend Protocol: FastMCP (Python)
+
+Inference LPUs: Groq (Llama 3.3 70B)
+
+Deployment: Vercel
+
+⚙️ Setup & Installation
+Clone the repository:
+
+Bash
+git clone [https://github.com/your-username/LawyerBot.git](https://github.com/your-username/LawyerBot.git)
+Install dependencies:
+
+Bash
+npm install
+Configure Environment:
+Create a .env file with your GROQ_API_KEY and OPENAI_API_KEY.
+
+Run Development Server:
+
+Bash
+npm run dev
