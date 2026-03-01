@@ -4,34 +4,43 @@
 
 **URL**: https://legal-insight-engine-main.vercel.app
 
+
+
 ```mermaid
 flowchart TD
-    subgraph User_Interface [Frontend Layer]
+    %% Define Nodes
+    subgraph User_Layer [User Experience]
         A[Next.js Web App]
     end
 
-    subgraph Logic_Orchestration [Intelligence Layer]
-        B{Request Router}
+    subgraph Logic_Layer [Intelligence & Reasoning]
+        B{Router}
         C[Groq Llama 3.3]
         D[OpenAI Fallback]
     end
 
-    subgraph Data_Protocol [MCP Backend]
-        E[FastMCP Python Server]
+    subgraph Data_Layer [MCP Legal Backend]
+        E[FastMCP Server]
         F[(intelligence.json)]
     end
 
-    A -->|User Query| B
-    B -->|Primary| C
-    B -.->|Fallback| D
-    C & D -->|Tool Call| E
-    E -->|Parse| F
-    F -->|Context| E
-    E -->|Results| A
+    %% Define Flow
+    A --> B
+    B --> C
+    B -.-> D
+    C & D --> E
+    E --> F
+    F --> E
+    E --> A
 
-    style B fill:#f96,stroke:#333,stroke-width:2px
-    style E fill:#69f,stroke:#333,stroke-width:2px
-    style F fill:#9f6,stroke:#333,stroke-width:2px
+    %% Define Styles
+    classDef router fill:#f96,stroke:#333,stroke-width:2px
+    classDef server fill:#69f,stroke:#333,stroke-width:2px
+    classDef data fill:#9f6,stroke:#333,stroke-width:2px
+
+    class B router
+    class E server
+    class F data
 
 This project is built with:
 
