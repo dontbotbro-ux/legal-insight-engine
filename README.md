@@ -3,6 +3,15 @@
 ## Project info
 
 URL: https://legal-insight-engine-main.vercel.app
+
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
 ```mermaid
 flowchart TD
     subgraph UI [Frontend Layer]
