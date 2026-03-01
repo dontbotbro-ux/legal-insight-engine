@@ -54,21 +54,21 @@ flowchart TD
 📋 Requirements Traceability Matrix (RTM)
 This matrix ensures 100% alignment between initial stakeholder requirements and the final technical deployment, preventing scope creep and ensuring business value.
 
-ID	Category	Requirement	Technical Implementation	Status
-REQ-01	Core	Rapid Legal Data Retrieval	FastMCP Server + intelligence.json	✅
-REQ-02	Logic	High-Inference Reasoning	Groq Llama-3.3 (LPU Inference)	✅
-REQ-03	Resilience	API Failover Protection	OpenAI GPT-5.3 Circuit Breaker	🛡️
-REQ-04	UX	Real-time Observability	System Health Monitor Component	📡
-REQ-05	Business	Token Cost Optimization	Context Pruning & Prompt Engineering	💰
+### 📋 Requirements Traceability Matrix (RTM)
+
+| ID | Category | Requirement | Technical Implementation | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **REQ-01** | **Core** | Rapid Legal Data Retrieval | `FastMCP Server` + `intelligence.json` | ✅ |
+| **REQ-02** | **Logic** | High-Inference Reasoning | `Groq Llama-3.3` (LPU Inference) | ✅ |
+| **REQ-03** | **Resilience** | API Failover Protection | `OpenAI GPT-5.3` Circuit Breaker | 🛡️ |
+| **REQ-04** | **UX** | Real-time Observability | `System Health Monitor` Component | 📡 |
+| **REQ-05** | **Business** | Token Cost Optimization | Context Pruning & Prompt Engineering | 💰 |
+
 🛠️ Technical Stack
 Frontend: Vite, React, TypeScript
-
 UI/UX: shadcn-ui, Tailwind CSS
-
 Backend Protocol: FastMCP (Python)
-
 Inference LPUs: Groq (Llama 3.3 70B)
-
 Deployment: Vercel
 
 ⚙️ Setup & Installation
