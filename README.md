@@ -21,16 +21,14 @@ flowchart TD
         F[(intelligence.json)]
     end
 
-    %% Connections
     A -->|User Query| B
     B -->|Primary| C
-    B -.->|429 Rate Limit Fallback| D
-    C & D -->|JSON Tool Call| E
-    E -->|Read/Parse| F
-    F -->|Legal Context| E
-    E -->|Structured Data| A
+    B -.->|Fallback| D
+    C & D -->|Tool Call| E
+    E -->|Parse| F
+    F -->|Context| E
+    E -->|Results| A
 
-    %% Styling
     style B fill:#f96,stroke:#333,stroke-width:2px
     style E fill:#69f,stroke:#333,stroke-width:2px
     style F fill:#9f6,stroke:#333,stroke-width:2px
