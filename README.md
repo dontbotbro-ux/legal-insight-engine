@@ -75,6 +75,7 @@ Deployment: Vercel
 
 ## ⚙️ Setup & Installation
 Clone the repository:
+
 Bash: git clone [https://github.com/your-username/LawyerBot.git](https://github.com/your-username/LawyerBot.git)
 
 Install dependencies:
@@ -82,6 +83,7 @@ Install dependencies:
 Bash: npm install
 
 Configure Environment:
+
 Create a .env file with your GROQ_API_KEY and OPENAI_API_KEY.
 
 Run Development Server:
