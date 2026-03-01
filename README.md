@@ -4,6 +4,7 @@
 
 **URL**: https://legal-insight-engine-main.vercel.app
 
+```mermaid
 flowchart TD
     subgraph User_Interface [Frontend Layer]
         A[Next.js Web App]
