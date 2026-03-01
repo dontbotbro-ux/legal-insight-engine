@@ -1,4 +1,4 @@
-# Welcome to LawerBot
+# Welcome to LawyerBot
 
 ## Project info
 
