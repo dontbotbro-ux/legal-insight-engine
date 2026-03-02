@@ -103,63 +103,6 @@ OPENAI_API_KEY=sk-...your_key_here
 [!WARNING]
 Never commit your .env file. It is already included in the .gitignore.
 
-4. Configure OpenClaw
-
-Run the following helper to generate your ~/.openclaw/openclaw.json:
-
-Bash
-python3 << 'PYEOF'
-import json, os
-config = {
-    "env": {
-        "GEMINI_API_KEY": "${GEMINI_API_KEY}",
-        "SUPABASE_URL": "${SUPABASE_URL}",
-        "SUPABASE_KEY": "${SUPABASE_KEY}",
-        "TELEGRAM_BOT_TOKEN": "${TELEGRAM_BOT_TOKEN}"
-    },
-    "agents": {"defaults": {"model": "openai-codex/gpt-5.3-codex"}},
-    "channels": {
-        "telegram": {
-            "enabled": True,
-            "botToken": "${TELEGRAM_BOT_TOKEN}",
-            "dmPolicy": "pairing"
-        }
-    },
-    "gateway": {"port": 18789, "mode": "local", "auth": {"mode": "none"}},
-    "plugins": {
-        "entries": {
-            "openclaw-mcp-adapter": {
-                "enabled": True,
-                "config": {
-                    "servers": [{
-                        "name": "lawyer-bot",
-                        "transport": "stdio",
-                        "command": "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3",
-                        "args": ["-u", "/Users/swaq/Documents/LawyerBot/server.py"],
-                        "env": {"SUPABASE_URL": "${SUPABASE_URL}", "SUPABASE_KEY": "${SUPABASE_KEY}"}
-                    }],
-                    "toolPrefix": True
-                }
-            }
-        }
-    }
-}
-with open(os.path.expanduser("~/.openclaw/openclaw.json"), "w") as f:
-    json.dump(config, f, indent=2)
-print("Config written to ~/.openclaw/openclaw.json")
-PYEOF
-5. Start the Gateway
-
-Bash
-# Export credentials for the session
-export SUPABASE_URL=[https://your-project-id.supabase.co](https://your-project-id.supabase.co)
-export SUPABASE_KEY=your_key_here
-export TELEGRAM_BOT_TOKEN=your_token_here
-export GEMINI_API_KEY=your_key_here
-
-# Start OpenClaw gateway
-cd /path/to/LawyerBot
-openclaw gateway run --allow-unconfigured
 💬 Usage
 Telegram Commands
 
