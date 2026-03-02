@@ -59,10 +59,17 @@ This engine bridges fragmented legal data with conversational AI through the **M
 | **REQ-06** | UX | Website Content Fetching | `fetch_website_page()` with domain allowlist | ✅ |
 | **REQ-07** | Business | Token Cost Optimization | Query caching + limit parameter + response truncation | 💰 |
 
-⚙️ Setup & Installation
-1. Prerequisites
+##🛠️ Technical Stack
+Layer,Technology,Purpose
+Frontend,Telegram Bot API,User messaging interface
+Gateway,OpenClaw 2026.2.26,"MCP routing, plugin management, auth"
+Protocol,FastMCP 1.26.0,Tool/resource exposure via stdio transport
+Backend,Python 3.14 + server.py,"Business logic, Supabase client, HTTP fetching"
+Database,Supabase (PostgreSQL),Legal case storage with content/summary/title fields
+Inference,Gemini + OpenAI Fallback,LLM reasoning with circuit breaker
 
-Bash
+## ⚙️ Setup & Installation
+1. Prerequisites
 # Python 3.14+
 brew install python@3.14
 
@@ -77,16 +84,14 @@ mkdir -p ~/.openclaw/extensions
 cd ~/.openclaw/extensions
 git clone [https://github.com/androidStern-personal/openclaw-mcp-adapter.git](https://github.com/androidStern-personal/openclaw-mcp-adapter.git)
 cd openclaw-mcp-adapter && npm install
-2. Clone & Install Dependencies
 
-Bash
-git clone [https://github.com/your-username/LawyerBot.git](https://github.com/your-username/LawyerBot.git)
+2. Clone & Install Dependenciesgit clone [https://github.com/your-username/LawyerBot.git](https://github.com/your-username/LawyerBot.git)
 cd LawyerBot
 
 # Install Python dependencies using the correct interpreter
 /Library/Frameworks/Python.framework/Versions/3.14/bin/python3 -m pip install python-dotenv supabase mcp httpx
-3. Configure Environment
 
+3. Configure Environment
 Create a .env file in the root directory:
 
 Code snippet
@@ -100,10 +105,8 @@ TELEGRAM_BOT_TOKEN=123456789:AAHdA...your_token_here
 # AI Providers
 GEMINI_API_KEY=AIzaSy...your_key_here
 OPENAI_API_KEY=sk-...your_key_here
-[!WARNING]
-Never commit your .env file. It is already included in the .gitignore.
 
-💬 Usage
+## 💬 Usage
 Telegram Commands
 
 Command	Description
@@ -118,13 +121,13 @@ Example Queries
 
 "What does my website say about consultation fees?" — Fetches text from your domain and summarizes.
 
-🔧 Troubleshooting
+## 🔧 Troubleshooting
 Issue	Solution
 ModuleNotFoundError	Verify pip install against the Python path used in openclaw.json.
 Telegram 404	Refresh token from @BotFather; ensure no other instances are running.
 Gateway port conflict	Run pkill -f "openclaw.*gateway" then restart.
 Tools not appearing	Run /sync in Telegram and wait 10s for adapter registration.
-🤝 Contributing
+## 🤝 Contributing
 Fork the repository.
 
 Create a feature branch (git checkout -b feature/AmazingFeature).
@@ -135,7 +138,7 @@ Push to branch (git push origin feature/AmazingFeature).
 
 Open a Pull Request.
 
-📄 License
+## 📄 License
 Distributed under the MIT License. See LICENSE for more information.
 
-Built with ⚖️ by [Your Name] Democratizing legal intelligence through modular AI architecture.
+Built with ⚖️ by Arham Zahid. Democratizing legal intelligence through modular AI architecture.
