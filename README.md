@@ -47,23 +47,18 @@ This engine bridges fragmented legal data with conversational AI through the **M
     │   Database   │      │    (HTTP)    │
     └──────────────┘      └──────────────┘
 ```
-📋 Requirements Traceability Matrix
-ID	Category	Requirement	Technical Implementation	Status
-REQ-01	Core	Natural Language Case Search	search_cases() tool with multi-field ilike queries	✅
-REQ-02	Logic	High-Inference Reasoning	Gemini API + OpenAI fallback circuit breaker	✅
-REQ-03	Resilience	API Failover Protection	Exponential backoff retry logic on 429 errors	🛡️
-REQ-04	Channel	Telegram Messaging Interface	OpenClaw Telegram channel with command sync	✅
-REQ-05	Data	Secure Credential Management	.env + python-dotenv + LaunchAgent env injection	🔐
-REQ-06	UX	Website Content Fetching	fetch_website_page() with domain allowlist	✅
-REQ-07	Business	Token Cost Optimization	Query caching + limit parameter + response truncation	💰
-🛠️ Technical Stack
-Layer	Technology	Purpose
-Frontend	Telegram Bot API	User messaging interface
-Gateway	OpenClaw 2026.2.26	MCP routing, plugin management, auth
-Protocol	FastMCP 1.26.0	Tool/resource exposure via stdio transport
-Backend	Python 3.14 + server.py	Business logic, Supabase client, HTTP fetching
-Database	Supabase (PostgreSQL)	Legal case storage with content/summary/title fields
-Inference	Gemini + OpenAI Fallback	LLM reasoning with circuit breaker
+## 📋 Requirements Traceability Matrix
+
+| ID | Category | Requirement | Technical Implementation | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **REQ-01** | Core | Natural Language Case Search | `search_cases()` tool with multi-field `ilike` queries | ✅ |
+| **REQ-02** | Logic | High-Inference Reasoning | Gemini API + OpenAI fallback circuit breaker | ✅ |
+| **REQ-03** | Resilience | API Failover Protection | Exponential backoff retry logic on 429 errors | 🛡️ |
+| **REQ-04** | Channel | Telegram Messaging Interface | OpenClaw Telegram channel with command sync | ✅ |
+| **REQ-05** | Data | Secure Credential Management | `.env` + `python-dotenv` + LaunchAgent env injection | 🔐 |
+| **REQ-06** | UX | Website Content Fetching | `fetch_website_page()` with domain allowlist | ✅ |
+| **REQ-07** | Business | Token Cost Optimization | Query caching + limit parameter + response truncation | 💰 |
+
 ⚙️ Setup & Installation
 1. Prerequisites
 
