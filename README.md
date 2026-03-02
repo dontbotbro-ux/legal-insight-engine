@@ -59,17 +59,21 @@ This engine bridges fragmented legal data with conversational AI through the **M
 | **REQ-06** | UX | Website Content Fetching | `fetch_website_page()` with domain allowlist | ✅ |
 | **REQ-07** | Business | Token Cost Optimization | Query caching + limit parameter + response truncation | 💰 |
 
-##🛠️ Technical Stack
-Layer,Technology,Purpose
-Frontend,Telegram Bot API,User messaging interface
-Gateway,OpenClaw 2026.2.26,"MCP routing, plugin management, auth"
-Protocol,FastMCP 1.26.0,Tool/resource exposure via stdio transport
-Backend,Python 3.14 + server.py,"Business logic, Supabase client, HTTP fetching"
-Database,Supabase (PostgreSQL),Legal case storage with content/summary/title fields
-Inference,Gemini + OpenAI Fallback,LLM reasoning with circuit breaker
+## 🛠️ Technical Stack
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Frontend** | Telegram Bot API | User messaging interface |
+| **Gateway** | OpenClaw 2026.2.26 | MCP routing, plugin management, auth |
+| **Protocol** | FastMCP 1.26.0 | Tool/resource exposure via stdio transport |
+| **Backend** | Python 3.14 + `server.py` | Business logic, Supabase client, HTTP fetching |
+| **Database** | Supabase (PostgreSQL) | Legal case storage with content/summary/title fields |
+| **Inference** | Gemini + OpenAI Fallback | LLM reasoning with circuit breaker |
 
 ## ⚙️ Setup & Installation
-1. Prerequisites
+
+### 1. Prerequisites
+```bash
 # Python 3.14+
 brew install python@3.14
 
@@ -78,7 +82,7 @@ brew install node
 
 # OpenClaw CLI
 npm install -g openclaw
-
+```
 # MCP Adapter Plugin
 mkdir -p ~/.openclaw/extensions
 cd ~/.openclaw/extensions
