@@ -5,6 +5,7 @@ Markdown
 [![MCP](https://img.shields.io/badge/Protocol-MCP%201.26.0-green)](https://modelcontextprotocol.io)
 [![Status](https://img.shields.io/badge/Status-Live-success)](#)
 
+**URL:** https://legal-insight-engine-main.vercel.app
 **Live Demo:** Message [@LawyerInsightBot](https://t.me/LawyerInsightBot) on Telegram.
 
 ## 🚀 Project Impact & Architectural Value
