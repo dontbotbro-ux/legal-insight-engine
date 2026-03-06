@@ -1,0 +1,9 @@
+{
+  "subject": "Pipeline Check: Intake Open",
+  "from": "ops@clientco.com",
+  "to": ["intake@firm.com"],
+  "body": "This is a validation payload to confirm the intake pipeline is open.",
+  "priority": "normal",
+  "message_id": "pipeline-check-001",
+  "thread_id": "pipeline-check-thread"
+}

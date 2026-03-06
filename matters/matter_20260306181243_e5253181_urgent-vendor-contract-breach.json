@@ -1,0 +1,68 @@
+{
+  "schema_version": "matter.v1",
+  "matter_id": "matter_20260306181243_e5253181",
+  "matter_name": "Urgent: Vendor Contract Breach",
+  "status": "intake",
+  "created_at": "2026-03-06T18:12:43.447707+00:00",
+  "updated_at": "2026-03-06T18:12:43.447707+00:00",
+  "intake": {
+    "source": "email_json",
+    "email": {
+      "message_id": "msg-xyz-789",
+      "thread_id": "thread-abc-123",
+      "subject": "Urgent: Vendor Contract Breach",
+      "body": "We received a demand letter and need litigation counsel. Potential breach and arbitration risk.",
+      "from": {
+        "name": "Jane Client",
+        "email": "jane.client@example.com"
+      },
+      "to": [
+        {
+          "name": null,
+          "email": "intake@firm.com"
+        }
+      ],
+      "cc": [
+        {
+          "name": null,
+          "email": "gc@clientco.com"
+        }
+      ],
+      "bcc": [],
+      "received_at": "2026-03-05T14:22:00Z",
+      "attachments": [
+        {
+          "name": "demand-letter.pdf",
+          "type": "application/pdf"
+        }
+      ],
+      "tags": [],
+      "urgency": "high"
+    },
+    "summary": {
+      "subject": "Urgent: Vendor Contract Breach",
+      "urgency": "high",
+      "keywords": [
+        "arbitration",
+        "breach",
+        "demand",
+        "litigation"
+      ]
+    }
+  },
+  "parties": [],
+  "attorneys": [],
+  "judges": [],
+  "claims": [],
+  "events": [
+    {
+      "type": "INTAKE_CREATED",
+      "timestamp": "2026-03-06T18:12:43.447707+00:00",
+      "source": "intake_agent",
+      "details": {
+        "message_id": "msg-xyz-789",
+        "thread_id": "thread-abc-123"
+      }
+    }
+  ]
+}

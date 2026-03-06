@@ -1,0 +1,48 @@
+{
+  "schema_version": "matter.v1",
+  "matter_id": "matter_20260306185503_c820888e",
+  "matter_name": "Connectivity check",
+  "status": "intake",
+  "created_at": "2026-03-06T18:55:03.942089+00:00",
+  "updated_at": "2026-03-06T18:55:03.942089+00:00",
+  "intake": {
+    "source": "email_json",
+    "email": {
+      "message_id": "10ec026d-1970-477e-a1d2-0ed10e83675d",
+      "thread_id": null,
+      "subject": "Connectivity check",
+      "body": "Testing intake endpoint",
+      "from": {
+        "name": null,
+        "email": "client@example.com"
+      },
+      "to": [],
+      "cc": [],
+      "bcc": [],
+      "received_at": "2026-03-06T18:55:03.942062+00:00",
+      "attachments": [],
+      "tags": [],
+      "urgency": "normal"
+    },
+    "summary": {
+      "subject": "Connectivity check",
+      "urgency": "normal",
+      "keywords": []
+    }
+  },
+  "parties": [],
+  "attorneys": [],
+  "judges": [],
+  "claims": [],
+  "events": [
+    {
+      "type": "INTAKE_CREATED",
+      "timestamp": "2026-03-06T18:55:03.942089+00:00",
+      "source": "intake_agent",
+      "details": {
+        "message_id": "10ec026d-1970-477e-a1d2-0ed10e83675d",
+        "thread_id": null
+      }
+    }
+  ]
+}

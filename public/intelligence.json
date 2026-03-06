@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "scannedAt": "2026-02-27T20:24:57.159Z",
+  "sourceDirectory": "/Users/swaq/Downloads/legal-insight-engine-main/uploads",
+  "filesScanned": [],
+  "warnings": [
+    "Uploads directory not found: /Users/swaq/Downloads/legal-insight-engine-main/uploads",
+    "No supported files found for scanning."
+  ],
+  "people": [],
+  "courts": [],
+  "keyDates": [],
+  "timeline": []
+}

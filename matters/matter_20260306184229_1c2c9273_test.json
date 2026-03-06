@@ -1,0 +1,53 @@
+{
+  "schema_version": "matter.v1",
+  "matter_id": "matter_20260306184229_1c2c9273",
+  "matter_name": "test",
+  "status": "intake",
+  "created_at": "2026-03-06T18:42:29.840480+00:00",
+  "updated_at": "2026-03-06T18:42:29.840480+00:00",
+  "intake": {
+    "source": "email_json",
+    "email": {
+      "message_id": "8261af1d-7d10-409d-a693-92b4fa6532b2",
+      "thread_id": null,
+      "subject": "test",
+      "body": "test",
+      "from": {
+        "name": null,
+        "email": "test@gmail.com"
+      },
+      "to": [
+        {
+          "name": null,
+          "email": "intake@firm.com"
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "received_at": "2026-03-06T18:42:29.828Z",
+      "attachments": [],
+      "tags": [],
+      "urgency": "normal"
+    },
+    "summary": {
+      "subject": "test",
+      "urgency": "normal",
+      "keywords": []
+    }
+  },
+  "parties": [],
+  "attorneys": [],
+  "judges": [],
+  "claims": [],
+  "events": [
+    {
+      "type": "INTAKE_CREATED",
+      "timestamp": "2026-03-06T18:42:29.840480+00:00",
+      "source": "intake_agent",
+      "details": {
+        "message_id": "8261af1d-7d10-409d-a693-92b4fa6532b2",
+        "thread_id": null
+      }
+    }
+  ]
+}
