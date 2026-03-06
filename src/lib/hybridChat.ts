@@ -8,7 +8,7 @@ You may receive:
 
 WHEN TO USE WHICH KNOWLEDGE
 
-1. If the user's question is about the uploaded document 
+1. If the user's question is about the uploaded document
    (for example: "summarize this brief", "what does section 5 say",
    "who are the parties in this case"):
    - Treat the PDF as the primary source of truth.
@@ -16,13 +16,13 @@ WHEN TO USE WHICH KNOWLEDGE
    - Where appropriate, mention specific page numbers or sections if the user references them
      (for example: "[p. 3]" or "[Section 5.2]").
 
-2. If the user's question is a general question 
-   (legal or non-legal) and does not depend on the PDF 
+2. If the user's question is a general question
+   (legal or non-legal) and does not depend on the PDF
    (for example: "what is summary judgment", "what is consideration in contract law"):
    - Answer using your general knowledge.
    - You may ignore the document context.
 
-3. If the question relates both to the document and to general legal principles 
+3. If the question relates both to the document and to general legal principles
    (for example: "how do these facts impact a summary judgment motion",
    "what standard applies to this kind of clause in this contract"):
    - Combine the document-specific details with general legal doctrine.
@@ -35,9 +35,8 @@ WHEN TO USE WHICH KNOWLEDGE
    - Format the output in a way a busy attorney can skim quickly (organized headings, bullets).
 
 If the document context is clearly irrelevant to the question, do not force it in.
-If the question cannot be answered from the document where it should be, 
+If the question cannot be answered from the document where it should be,
 be explicit about what is and is not supported by the PDF.
-<<<<<<< HEAD
 
 OUTPUT STYLE REQUIREMENTS
 - Write in a professional legal-work-product style suitable for attorneys and clients.
@@ -46,8 +45,6 @@ OUTPUT STYLE REQUIREMENTS
 - Avoid decorative markdown.
 - Do not output raw markdown syntax for emphasis (for example **bold** markers).
 - If a table is useful, provide a properly structured markdown table with clear headers.
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 `.trim();
 
 export type HybridChatMessage = {
@@ -55,7 +52,6 @@ export type HybridChatMessage = {
   content: string;
 };
 
-<<<<<<< HEAD
 const MAX_HISTORY_MESSAGES = 8;
 const MAX_MESSAGE_CHARS = 1200;
 const MAX_DOC_CONTEXT_CHARS = 8000;
@@ -66,20 +62,19 @@ const LOW_TOKEN_MAX_DOC_CONTEXT_CHARS = 1200;
 
 const normalizeForMatch = (value: string) => value.toLowerCase();
 
-const toKeywords = (value: string): string[] => {
-  return Array.from(
+const toKeywords = (value: string): string[] =>
+  Array.from(
     new Set(
       value
         .toLowerCase()
         .replace(/[^a-z0-9\s]/g, " ")
         .split(/\s+/)
-        .filter((w) => w.length >= 4),
+        .filter((word) => word.length >= 4),
     ),
   ).slice(0, 16);
-};
 
 const splitPageBlocks = (pdfText: string): string[] => {
-  const blocks = pdfText.split(/(?=\[Page \d+\])/g).map((b) => b.trim()).filter(Boolean);
+  const blocks = pdfText.split(/(?=\[Page \d+\])/g).map((block) => block.trim()).filter(Boolean);
   return blocks.length ? blocks : [pdfText];
 };
 
@@ -87,8 +82,8 @@ const scoreBlock = (block: string, keywords: string[]): number => {
   if (!keywords.length) return 0;
   const normalized = normalizeForMatch(block);
   let score = 0;
-  for (const k of keywords) {
-    if (normalized.includes(k)) score += 1;
+  for (const keyword of keywords) {
+    if (normalized.includes(keyword)) score += 1;
   }
   return score;
 };
@@ -105,12 +100,12 @@ const compactDocumentContext = (pdfText?: string, latestUserPrompt?: string): st
 
   const chosen: string[] = [];
   let used = 0;
+
   for (const item of ranked) {
     if (item.score === 0 && chosen.length >= 2) continue;
-    const candidate = item.block;
-    if (used + candidate.length > MAX_DOC_CONTEXT_CHARS) continue;
-    chosen.push(candidate);
-    used += candidate.length;
+    if (used + item.block.length > MAX_DOC_CONTEXT_CHARS) continue;
+    chosen.push(item.block);
+    used += item.block.length;
     if (used >= MAX_DOC_CONTEXT_CHARS * 0.9) break;
     if (chosen.length >= 6) break;
   }
@@ -119,27 +114,20 @@ const compactDocumentContext = (pdfText?: string, latestUserPrompt?: string): st
     return pdfText.slice(0, MAX_DOC_CONTEXT_CHARS);
   }
 
-  const context = chosen.join("\n\n");
-  return context.slice(0, MAX_DOC_CONTEXT_CHARS);
+  return chosen.join("\n\n").slice(0, MAX_DOC_CONTEXT_CHARS);
 };
 
-const compactHistory = (history: HybridChatMessage[]): HybridChatMessage[] => {
-  return history
-    .slice(-MAX_HISTORY_MESSAGES)
-    .map((m) => ({
-      role: m.role,
-      content: m.content.slice(0, MAX_MESSAGE_CHARS),
-    }));
-};
+const compactHistory = (history: HybridChatMessage[]): HybridChatMessage[] =>
+  history.slice(-MAX_HISTORY_MESSAGES).map((message) => ({
+    role: message.role,
+    content: message.content.slice(0, MAX_MESSAGE_CHARS),
+  }));
 
-const compactHistoryForLowTokenRetry = (history: HybridChatMessage[]): HybridChatMessage[] => {
-  return history
-    .slice(-LOW_TOKEN_MAX_HISTORY_MESSAGES)
-    .map((m) => ({
-      role: m.role,
-      content: m.content.slice(0, LOW_TOKEN_MAX_MESSAGE_CHARS),
-    }));
-};
+const compactHistoryForLowTokenRetry = (history: HybridChatMessage[]): HybridChatMessage[] =>
+  history.slice(-LOW_TOKEN_MAX_HISTORY_MESSAGES).map((message) => ({
+    role: message.role,
+    content: message.content.slice(0, LOW_TOKEN_MAX_MESSAGE_CHARS),
+  }));
 
 const buildPayload = (args: {
   model: string;
@@ -158,9 +146,9 @@ const buildPayload = (args: {
           },
         ]
       : []),
-    ...args.history.map((m) => ({
-      role: m.role,
-      content: m.content,
+    ...args.history.map((message) => ({
+      role: message.role,
+      content: message.content,
     })),
   ],
   temperature: 0.2,
@@ -170,9 +158,10 @@ const buildPayload = (args: {
 const parseLimitNumbers = (message: string): { limit?: number; used?: number } => {
   const limitMatch = message.match(/Limit\s+(\d+)/i);
   const usedMatch = message.match(/Used\s+(\d+)/i);
-  const limit = limitMatch ? Number(limitMatch[1]) : undefined;
-  const used = usedMatch ? Number(usedMatch[1]) : undefined;
-  return { limit, used };
+  return {
+    limit: limitMatch ? Number(limitMatch[1]) : undefined,
+    used: usedMatch ? Number(usedMatch[1]) : undefined,
+  };
 };
 
 const parseRetryAfter = (message: string): string | null => {
@@ -180,8 +169,6 @@ const parseRetryAfter = (message: string): string | null => {
   return retryMatch?.[1] ?? null;
 };
 
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 export async function getHybridAnswer(params: {
   history: HybridChatMessage[];
   pdfText?: string;
@@ -191,9 +178,8 @@ export async function getHybridAnswer(params: {
     return "The AI backend is not configured (missing Groq/OpenAI API key).";
   }
 
-<<<<<<< HEAD
   const compactedHistory = compactHistory(params.history);
-  const latestUserPrompt = [...compactedHistory].reverse().find((m) => m.role === "user")?.content;
+  const latestUserPrompt = [...compactedHistory].reverse().find((message) => message.role === "user")?.content;
   const docContext = compactDocumentContext(params.pdfText, latestUserPrompt);
 
   const payload = buildPayload({
@@ -201,27 +187,6 @@ export async function getHybridAnswer(params: {
     history: compactedHistory,
     docContext,
   });
-=======
-  const payload = {
-    model: "llama-3.3-70b-versatile",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      ...(params.pdfText
-        ? [
-            {
-              role: "system" as const,
-              content: `DOCUMENT CONTEXT (verbatim text extracted from the user's PDF):\n\n${params.pdfText}`,
-            },
-          ]
-        : []),
-      ...params.history.map((m) => ({
-        role: m.role,
-        content: m.content,
-      })),
-    ],
-    temperature: 0.2,
-  };
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
   try {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -235,27 +200,19 @@ export async function getHybridAnswer(params: {
 
     if (!res.ok) {
       let details = "";
-<<<<<<< HEAD
       let detailMessage = "";
       try {
-        const errJson = (await res.json()) as { error?: { message?: string; type?: string } };
+        const errJson = (await res.json()) as { error?: { message?: string } };
         if (errJson?.error?.message) {
           detailMessage = errJson.error.message;
           details = ` (${detailMessage})`;
-=======
-      try {
-        const errJson = (await res.json()) as { error?: { message?: string; type?: string } };
-        if (errJson?.error?.message) {
-          details = ` (${errJson.error.message})`;
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
         }
       } catch {
-        // ignore JSON parse errors, fall back to status text
+        // ignore JSON parse errors
       }
 
-<<<<<<< HEAD
       if (res.status === 413) {
-        return "Your request is too large for the current model limits. Please ask a narrower question (for example, one clause, one section, or one date range).";
+        return "Your request is too large for the current model limits. Please ask a narrower question.";
       }
 
       if (res.status === 429) {
@@ -263,10 +220,9 @@ export async function getHybridAnswer(params: {
         const { limit, used } = parseLimitNumbers(detailMessage);
         const remaining = typeof limit === "number" && typeof used === "number" ? limit - used : undefined;
 
-        // If there are a few tokens left in the daily budget, retry once with an ultra-small request.
         if (typeof remaining === "number" && remaining > 120) {
           const lowTokenHistory = compactHistoryForLowTokenRetry(params.history);
-          const lowTokenPrompt = [...lowTokenHistory].reverse().find((m) => m.role === "user")?.content;
+          const lowTokenPrompt = [...lowTokenHistory].reverse().find((message) => message.role === "user")?.content;
           const lowTokenContext = compactDocumentContext(params.pdfText, lowTokenPrompt)?.slice(
             0,
             LOW_TOKEN_MAX_DOC_CONTEXT_CHARS,
@@ -299,26 +255,17 @@ export async function getHybridAnswer(params: {
           : "Daily AI quota reached. Please wait for reset, reduce prompt size, or upgrade the Groq billing tier.";
       }
 
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       return `The AI service returned an error (status ${res.status}${details}).`;
     }
 
-    const data = (await res.json()) as {
-      choices: { message?: { content?: string } }[];
-    };
-
+    const data = (await res.json()) as { choices: { message?: { content?: string } }[] };
     const content = data.choices[0]?.message?.content?.trim();
     if (!content) {
       return "I couldn't generate a useful answer. Please try rephrasing your question.";
     }
 
     return content;
-  } catch (err) {
+  } catch {
     return "I couldn't reach the AI service (network error). Please check your connection and try again.";
   }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c

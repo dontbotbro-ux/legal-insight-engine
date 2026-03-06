@@ -9,10 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-<<<<<<< HEAD
     "scan:uploads": "node scripts/scan-uploads.mjs",
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -50,44 +47,27 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
-<<<<<<< HEAD
     "docx": "^9.6.0",
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.34.3",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.575.0",
     "next-themes": "^0.3.0",
-<<<<<<< HEAD
     "pdfjs-dist": "^4.10.38",
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.61.1",
-<<<<<<< HEAD
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^2.1.9",
     "react-router-dom": "^6.30.1",
     "recharts": "^2.15.4",
     "remark-gfm": "^4.0.1",
-=======
-    "react-resizable-panels": "^2.1.9",
-    "react-router-dom": "^6.30.1",
-    "recharts": "^2.15.4",
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
-<<<<<<< HEAD
     "zod": "^3.25.76"
-=======
-    "zod": "^3.25.76",
-    "pdfjs-dist": "^4.10.38"
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

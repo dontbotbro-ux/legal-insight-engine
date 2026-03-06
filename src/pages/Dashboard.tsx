@@ -1,13 +1,8 @@
-<<<<<<< HEAD
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
-=======
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 import {
   Scale,
   Upload,
@@ -20,18 +15,14 @@ import {
   PanelLeft,
   Landmark,
   Clock3,
-<<<<<<< HEAD
   AlertTriangle,
   Gavel,
   ListTree,
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-<<<<<<< HEAD
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { pdfjsLib } from "@/pdf";
 import { getHybridAnswer, type HybridChatMessage } from "@/lib/hybridChat";
@@ -39,21 +30,14 @@ import { getMatter, saveMatter } from "@/lib/matterRepository";
 import { useAuth } from "@/lib/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import { useIsMobile } from "@/hooks/use-mobile";
-=======
-import { pdfjsLib } from "@/pdf";
-import { getHybridAnswer, type HybridChatMessage } from "@/lib/hybridChat";
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
 type TimelineEvent = {
   id: string;
   date: string;
   label: string;
   page: number;
-<<<<<<< HEAD
   evidence?: string;
   kind?: "detected" | "deadline";
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 };
 
 type LegalEntity = {
@@ -75,7 +59,6 @@ type InsightMetrics = {
   liabilityCap: string | null;
 };
 
-<<<<<<< HEAD
 type PdfTextItem = {
   str: string;
   hasEOL?: boolean;
@@ -311,7 +294,7 @@ const Dashboard = () => {
   const [dragging, setDragging] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [mobileInsightsOpen, setMobileInsightsOpen] = useState(false);
-  const [metricsOpen, setMetricsOpen] = useState(false);
+  const [metricsOpen, setMetricsOpen] = useState(true);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [activePage, setActivePage] = useState<number | null>(null);
   const [totalPages, setTotalPages] = useState(0);
@@ -327,32 +310,15 @@ const Dashboard = () => {
   const [riskAlerts, setRiskAlerts] = useState<RiskAlert[]>([]);
   const [judgeAnalytics, setJudgeAnalytics] = useState<JudgeAnalytics | null>(null);
   const [seededIntelligence, setSeededIntelligence] = useState<IntelligenceSeed | null>(null);
-=======
-const Dashboard = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const [chatInput, setChatInput] = useState("");
-  const [metricsOpen, setMetricsOpen] = useState(true);
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [activePage, setActivePage] = useState<number | null>(null);
-
-  const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
-  const [people, setPeople] = useState<LegalEntity[]>([]);
-  const [courts, setCourts] = useState<LegalEntity[]>([]);
-  const [dates, setDates] = useState<LegalEntity[]>([]);
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
   const [extracting, setExtracting] = useState(false);
   const [extractError, setExtractError] = useState<string | null>(null);
   const [docText, setDocText] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [answering, setAnswering] = useState(false);
-<<<<<<< HEAD
   const [currentMatterId, setCurrentMatterId] = useState<string | null>(null);
   const messagesViewportRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const autosaveMatterIdRef = useRef<string | null>(null);
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
   const [metrics, setMetrics] = useState<InsightMetrics>({
     governingLaw: null,
     keyParties: null,
@@ -360,7 +326,6 @@ const Dashboard = () => {
     liabilityCap: null,
   });
 
-<<<<<<< HEAD
   useEffect(() => {
     void (async () => {
       try {
@@ -382,10 +347,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (isMobile) {
+      setMetricsOpen(false);
       setMobileInsightsOpen(false);
     }
   }, [isMobile]);
-
 
   const loadMatterFromRepository = async (id: string) => {
     if (!user) {
@@ -420,19 +385,14 @@ const Dashboard = () => {
     }
   };
 
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragging(false);
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile?.type === "application/pdf") {
-<<<<<<< HEAD
       setCurrentMatterId(null);
       autosaveMatterIdRef.current = null;
       setMessages([]);
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       setFile(droppedFile);
     }
   };
@@ -440,17 +400,13 @@ const Dashboard = () => {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected?.type === "application/pdf") {
-<<<<<<< HEAD
       setCurrentMatterId(null);
       autosaveMatterIdRef.current = null;
       setMessages([]);
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       setFile(selected);
     }
   };
 
-<<<<<<< HEAD
   useEffect(() => {
     const matterId = searchParams.get("matter");
     if (!matterId || !user) return;
@@ -492,8 +448,6 @@ const Dashboard = () => {
     setTimelineFocus(seedTimeline[0] ?? null);
   }, [file, seededIntelligence]);
 
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
   // When a new PDF is loaded, generate a blob URL and kick off extraction.
   useEffect(() => {
     if (!file) {
@@ -502,7 +456,6 @@ const Dashboard = () => {
       }
       setPdfUrl(null);
       setActivePage(null);
-<<<<<<< HEAD
       setTotalPages(0);
       setPageLabels([]);
       setManualStartPage(null);
@@ -514,12 +467,6 @@ const Dashboard = () => {
       setDates([]);
       setRiskAlerts([]);
       setJudgeAnalytics(null);
-=======
-      setTimeline([]);
-      setPeople([]);
-      setCourts([]);
-      setDates([]);
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       setExtractError(null);
       setDocText("");
       setMessages([]);
@@ -543,15 +490,12 @@ const Dashboard = () => {
         const buffer = await file.arrayBuffer();
         const loadingTask = pdfjsLib.getDocument({ data: buffer });
         const pdf = await loadingTask.promise;
-<<<<<<< HEAD
         setTotalPages(pdf.numPages);
         const labels = await pdf.getPageLabels();
         let resolvedPageLabels: string[] = Array.from({ length: pdf.numPages }, (_, idx) => String(idx + 1));
         if (Array.isArray(labels) && labels.length === pdf.numPages && labels.some((label) => Boolean(label?.trim()))) {
           resolvedPageLabels = labels.map((label, idx) => (label?.trim() ? label.trim() : String(idx + 1)));
         }
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
         const newTimeline: TimelineEvent[] = [];
         const peopleSet = new Map<string, LegalEntity>();
@@ -559,7 +503,6 @@ const Dashboard = () => {
         const dateSet = new Map<string, LegalEntity>();
 
         const dateRegexLong =
-<<<<<<< HEAD
           /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\b/gi;
         const dateRegexShort = /\b\d{1,4}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/g;
         const captionRegex = /([A-Z][A-Za-z.&\s]+?)\s+v\.?\s+([A-Z][A-Za-z.&\s]+?)(?=,|\n|$)/;
@@ -676,22 +619,6 @@ const Dashboard = () => {
               }
             }
           }
-=======
-          /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},\s+\d{4}\b/gi;
-        const dateRegexShort = /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/g;
-        const captionRegex = /([A-Z][A-Za-z.&\s]+?)\s+v\.?\s+([A-Z][A-Za-z.&\s]+?)(?=,|\n|$)/;
-        const courtRegex = /\b(Supreme Court|Court of Appeals|District Court|High Court|Appellate Division|Tribunal)\b/gi;
-
-        let combinedText = "";
-
-        const numPages = pdf.numPages;
-        for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-          const page = await pdf.getPage(pageNum);
-          const textContent = await page.getTextContent();
-          const text = textContent.items.map((item: any) => item.str).join(" ");
-
-          combinedText += text + "\n\n";
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
           // Case caption (people)
           const captionMatch = text.match(captionRegex);
@@ -710,14 +637,11 @@ const Dashboard = () => {
             });
           }
 
-<<<<<<< HEAD
           // Reset global regex cursors for each new page text.
           courtRegex.lastIndex = 0;
           dateRegexLong.lastIndex = 0;
           dateRegexShort.lastIndex = 0;
 
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
           // Courts
           let courtMatch: RegExpExecArray | null;
           while ((courtMatch = courtRegex.exec(text)) !== null) {
@@ -735,18 +659,9 @@ const Dashboard = () => {
           // Dates (for both timeline + entities)
           const allDates = new Set<string>();
           let m: RegExpExecArray | null;
-<<<<<<< HEAD
           while ((m = dateRegexLong.exec(text)) !== null) allDates.add(normalizeWhitespace(m[0]));
           while ((m = dateRegexShort.exec(text)) !== null) allDates.add(normalizeWhitespace(m[0]));
           extractDateMatches(text).forEach((d) => allDates.add(d));
-=======
-          while ((m = dateRegexLong.exec(text)) !== null) {
-            allDates.add(m[0]);
-          }
-          while ((m = dateRegexShort.exec(text)) !== null) {
-            allDates.add(m[0]);
-          }
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
           if (allDates.size > 0) {
             const pageSnippet = text.slice(0, 240);
@@ -764,17 +679,13 @@ const Dashboard = () => {
                 date: d,
                 label: pageSnippet.trim().replace(/\s+/g, " ") || "Referenced in document",
                 page: pageNum,
-<<<<<<< HEAD
                 evidence: pageSnippet.trim().replace(/\s+/g, " "),
                 kind: "detected",
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
               });
             }
           }
         }
 
-<<<<<<< HEAD
         // Additional party fallback for agreements that don't use "A v. B" caption style.
         if (peopleSet.size === 0 && combinedText.trim().length > 0) {
           const fallbackParties = parsePartiesFromText(combinedText);
@@ -869,15 +780,10 @@ const Dashboard = () => {
           const aDate = parseDateLoose(a.date);
           const bDate = parseDateLoose(b.date);
           if (aDate && bDate) return aDate.getTime() - bDate.getTime();
-=======
-        // Sort timeline by page then date string (best-effort chronological)
-        newTimeline.sort((a, b) => {
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
           if (a.page !== b.page) return a.page - b.page;
           return a.date.localeCompare(b.date);
         });
 
-<<<<<<< HEAD
         const normalizedDocText = combinedText.replace(/\s+/g, " ").trim();
         const mergedToc = outlineEntries.length > 0 ? outlineEntries : Array.from(generatedTocMap.values());
         // Normalize numeric printed labels with a stable offset if detected
@@ -993,13 +899,6 @@ const Dashboard = () => {
         } else {
           setExtractError(null);
         }
-=======
-        setTimeline(newTimeline);
-        setPeople(Array.from(peopleSet.values()));
-        setCourts(Array.from(courtSet.values()));
-        setDates(Array.from(dateSet.values()));
-        setDocText(combinedText);
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       } catch (err) {
         console.error(err);
         setExtractError("We couldn't analyze this PDF. Please try another file.");
@@ -1037,38 +936,25 @@ const Dashboard = () => {
     // Governing law
     let governingLaw: string | null = null;
     const lawMatch =
-<<<<<<< HEAD
       text.match(/govern(?:ed|ing)\s+(?:by|under)\s+(?:the\s+)?laws?\s+of\s+([A-Za-z\s]+?)(?:,|\.|;|\)|\n|$)/i) ??
       text.match(/governing law[:\s]+([A-Za-z\s]+?)(?:,|\.|;|\)|\n|$)/i) ??
       text.match(/construed in accordance with the laws?\s+of\s+([A-Za-z\s]+?)(?:,|\.|;|\)|\n|$)/i);
     if (lawMatch) {
       governingLaw = lawMatch[1].replace(/^the state of\s+/i, "").trim();
-=======
-      text.match(/governed by the laws of\s+([A-Za-z\s]+?)(?:,|\.)/i) ??
-      text.match(/governing law[:\s]+([A-Za-z\s]+?)(?:,|\.)/i);
-    if (lawMatch) {
-      governingLaw = lawMatch[1].trim();
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     }
 
     // Key parties from extracted people
     let keyParties: string | null = null;
-<<<<<<< HEAD
     const parsedParties = parsePartiesFromText(text);
     if (people.length > 0 || parsedParties.length > 0) {
       const uniqueNames = Array.from(
         new Set([...people.map((p) => p.name), ...parsedParties].map((name) => normalizeWhitespace(name))),
       );
-=======
-    if (people.length > 0) {
-      const uniqueNames = Array.from(new Set(people.map((p) => p.name)));
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       keyParties = uniqueNames.slice(0, 4).join(" · ");
     }
 
     // Termination notice
     let terminationNotice: string | null = null;
-<<<<<<< HEAD
     const termMatch =
       text.match(/(\d+)\s*[- ]?(day|days|month|months)\s*(?:'?s)?\s*(?:prior written )?notice\s+(?:of\s+)?termination/i) ??
       text.match(/(?:at least\s+)?(\d+)\s+(day|days|month|months)\s+(?:prior to|before)\s+(?:termination|ending)/i) ??
@@ -1077,29 +963,16 @@ const Dashboard = () => {
       const amount = termMatch[1];
       const unit = termMatch[2];
       terminationNotice = `${amount} ${unit}`;
-=======
-    const termMatch = text.match(
-      /(at least\s+)?(\d+)\s+(day|days|month|months)\s+(?:prior to|before)\s+(?:termination|ending)/i,
-    );
-    if (termMatch) {
-      terminationNotice = `${termMatch[2]} ${termMatch[3]}`;
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     }
 
     // Liability cap
     let liabilityCap: string | null = null;
     const capMatch =
-<<<<<<< HEAD
       text.match(/(?:aggregate|total)?\s*liability(?: of [A-Za-z\s]+)?\s+(?:shall )?not exceed\s+([\$€£]?\s?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
       text.match(/liability(?: of [A-Za-z\s]+)?\s+is\s+limited\s+to\s+([\$€£]?\s?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
       text.match(/cap on (?:the )?liability\s+of\s+([\$€£]?\s?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
       text.match(/liability cap[:\s]+([\$€£]?\s?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
       text.match(/in no event.*?liability.*?exceed\s+([\$€£]?\s?[0-9,\.]+\s*(?:million|thousand)?)/i);
-=======
-      text.match(/liability (?:shall )?not exceed\s+([\$€£]?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
-      text.match(/cap on (?:the )?liability\s+of\s+([\$€£]?[0-9,\.]+\s*(?:million|thousand)?)/i) ??
-      text.match(/liability cap[:\s]+([\$€£]?[0-9,\.]+\s*(?:million|thousand)?)/i);
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     if (capMatch) {
       liabilityCap = capMatch[1].trim();
     }
@@ -1112,12 +985,18 @@ const Dashboard = () => {
     });
   }, [docText, people]);
 
-<<<<<<< HEAD
-  useLayoutEffect(() => {
-    const viewport = messagesViewportRef.current;
-    if (!viewport) return;
-    viewport.scrollTo({ top: viewport.scrollHeight, behavior: "auto" });
-  }, [messages, answering]);
+  useEffect(() => {
+    const scrollToBottom = () => {
+      const anchor = messagesEndRef.current;
+      if (anchor) {
+        anchor.scrollIntoView({ block: "end", behavior: "auto" });
+        return;
+      }
+      const viewport = messagesViewportRef.current;
+      if (viewport) viewport.scrollTop = viewport.scrollHeight;
+    };
+    requestAnimationFrame(() => requestAnimationFrame(scrollToBottom));
+  }, [messages, answering, isMobile]);
 
   useEffect(() => {
     if (!file || !user) return;
@@ -1145,35 +1024,6 @@ const Dashboard = () => {
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
-    if (extracting) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `m-${Date.now()}-a-pending`,
-          role: "assistant",
-          content: "I am still analyzing the uploaded PDF. Please try again in a moment.",
-        },
-      ]);
-      return;
-    }
-    if (!docText.trim()) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `m-${Date.now()}-a-nodoc`,
-          role: "assistant",
-          content:
-            extractError ??
-            "I could not extract readable text from this PDF yet. Please wait for analysis to finish or upload a text-based PDF.",
-        },
-      ]);
-      return;
-    }
-=======
-  const handleChatSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!file) return;
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     const trimmed = chatInput.trim();
     if (!trimmed) return;
 
@@ -1221,10 +1071,6 @@ const Dashboard = () => {
 
   const runQuickAction = (label: string, instruction: string) => {
     if (!file) return;
-<<<<<<< HEAD
-    if (extracting || !docText.trim()) return;
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
     const content = `Quick Action – ${label}.\n\n${instruction}`;
     const userMessage: ChatMessage = {
@@ -1268,7 +1114,6 @@ const Dashboard = () => {
     })();
   };
 
-<<<<<<< HEAD
   const handleDownloadAnalysis = async () => {
     if (!messages.length) return;
 
@@ -1327,41 +1172,12 @@ const Dashboard = () => {
     const a = document.createElement("a");
     a.href = url;
     a.download = file ? `${file.name.replace(/\.[^.]+$/, "")}-analysis.docx` : "analysis.docx";
-=======
-  const handleDownloadAnalysis = () => {
-    if (!messages.length) return;
-    const lines: string[] = [];
-    lines.push("# Document Analysis");
-    if (file) {
-      lines.push("");
-      lines.push(`**Document:** ${file.name}`);
-    }
-    lines.push("");
-    lines.push("## Chat Transcript");
-    lines.push("");
-
-    messages.forEach((m) => {
-      const prefix = m.role === "user" ? "### Attorney" : "### Senior Paralegal";
-      lines.push(prefix);
-      lines.push("");
-      lines.push(m.content);
-      lines.push("");
-    });
-
-    const markdown = lines.join("\n");
-    const blob = new Blob([markdown], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = file ? `${file.name.replace(/\.[^.]+$/, "")}-analysis.md` : "analysis.md";
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
     document.body.appendChild(a);
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
   };
 
-<<<<<<< HEAD
   const copyDraftField = async (value: string) => {
     try {
       await navigator.clipboard.writeText(value);
@@ -1373,26 +1189,18 @@ const Dashboard = () => {
   return (
     <div
       className={`bg-navy-deep flex flex-col ${
-        isMobile ? "h-[100dvh] overflow-hidden" : "h-screen overflow-hidden"
+        isMobile ? "min-h-screen overflow-x-hidden overflow-y-auto" : "h-screen overflow-hidden"
       }`}
     >
       {/* Top bar */}
       <header className="h-14 border-b border-border bg-navy-deep/95 px-4 shrink-0">
         <div className="h-full flex items-center gap-3 min-w-0">
           <div className="flex items-center gap-3 shrink-0">
-=======
-  return (
-    <div className="min-h-screen bg-navy-deep flex flex-col">
-      {/* Top bar */}
-      <header className="h-14 border-b border-border bg-navy-deep/95 flex items-center justify-between px-4 shrink-0">
-        <div className="flex items-center gap-3">
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
           <Link to="/" className="flex items-center gap-2">
             <Scale className="h-5 w-5 text-gold" />
             <span className="font-serif text-lg font-bold text-cream">LawyerBot</span>
           </Link>
           <Separator orientation="vertical" className="h-6" />
-<<<<<<< HEAD
           <Button
             variant="ghost"
             size="sm"
@@ -1427,54 +1235,27 @@ const Dashboard = () => {
       </header>
 
       {/* Main area */}
-      <div className={isMobile ? "flex-1 min-h-0 bg-cream overflow-hidden" : "flex-1 min-h-0 bg-cream overflow-hidden"}>
+      <div className={isMobile ? "bg-cream overflow-visible" : "flex-1 bg-cream min-h-0 overflow-hidden"}>
         <ResizablePanelGroup
           direction={isMobile ? "vertical" : "horizontal"}
-          className={isMobile ? "h-full min-h-0 touch-pan-y" : "h-full min-h-0"}
+          className={isMobile ? "h-auto min-h-0 overflow-visible" : "h-full min-h-0"}
         >
           {metricsOpen && (
             <>
               <ResizablePanel
-                defaultSize={isMobile ? 45 : 24}
-                minSize={isMobile ? 35 : 16}
-                maxSize={isMobile ? 70 : 38}
-                className={isMobile ? "min-h-0 overflow-hidden" : "min-h-0 overflow-hidden"}
+                defaultSize={isMobile ? 22 : 24}
+                minSize={isMobile ? 15 : 16}
+                maxSize={isMobile ? 45 : 38}
+                className={isMobile ? "min-h-[360px] overflow-y-auto" : "min-h-0 overflow-y-auto"}
+                style={isMobile ? { overflow: "visible" } : undefined}
               >
-                <aside
-                  className={`bg-navy-deep text-cream p-5 flex flex-col min-h-0 ${
-                    isMobile
-                      ? "h-full border-b border-border pb-[calc(env(safe-area-inset-bottom)+1.25rem)]"
-                      : "h-full border-r border-border"
-                  }`}
-                >
-=======
-          <span className="text-sm text-muted-foreground font-sans">Dashboard</span>
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setMetricsOpen(!metricsOpen)}
-          className="text-muted-foreground"
-        >
-          {metricsOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeft className="h-4 w-4" />}
-          <span className="ml-2 text-sm">Intelligence</span>
-        </Button>
-      </header>
-
-      {/* Main area */}
-      <div className="flex-1 flex overflow-hidden bg-cream">
-        {/* Legal Intelligence Sidebar */}
-        {metricsOpen && (
-          <aside className="w-80 border-r border-border bg-navy-deep text-cream p-5 overflow-y-auto shrink-0">
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
+                <aside className={`h-full bg-navy-deep text-cream p-5 overflow-y-auto ${isMobile ? "border-b border-border" : "border-r border-border"}`}>
             <h3 className="font-serif font-bold mb-1 text-xs uppercase tracking-[0.2em] text-gold">
               Legal Intelligence
             </h3>
             <p className="text-[11px] text-muted-foreground/80 mb-4">
               Automatically builds a matter-aware brief from your PDF.
             </p>
-<<<<<<< HEAD
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-1">
 
             <section className="mb-6">
               <div className="flex items-center gap-2 mb-2">
@@ -1613,13 +1394,10 @@ const Dashboard = () => {
                 </Card>
               )}
             </section>
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
             <section className="mb-6">
               <div className="flex items-center gap-2 mb-2">
                 <Clock3 className="h-4 w-4 text-gold" />
-<<<<<<< HEAD
                 <span className="text-sm font-semibold">Tactical Timeline</span>
               </div>
               {timeline.length > 0 && (
@@ -1642,10 +1420,6 @@ const Dashboard = () => {
                   <p className="text-[10px] text-gold/90 mt-1">[p. {timelineFocus.page}]</p>
                 </Card>
               )}
-=======
-                <span className="text-sm font-semibold">Timeline of Events</span>
-              </div>
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
               <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
                 {!file && <SidebarHint label="Upload a PDF to generate a chronology." />}
                 {file && extracting && <SidebarHint label="Reading the record and building a chronology..." />}
@@ -1662,12 +1436,9 @@ const Dashboard = () => {
                     <p className="text-[11px] uppercase tracking-wide text-gold mb-0.5">{event.date}</p>
                     <p className="text-xs text-cream/90 line-clamp-2 font-serif leading-snug">
                       {event.label}
-<<<<<<< HEAD
                       {event.kind === "deadline" && (
                         <span className="ml-1 text-[10px] text-red-300">[deadline]</span>
                       )}
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
                       <span className="ml-1 text-[10px] text-gold/80">[p. {event.page}]</span>
                     </p>
                   </button>
@@ -1768,28 +1539,20 @@ const Dashboard = () => {
                 </Button>
               </div>
             </section>
-<<<<<<< HEAD
-            </div>
                 </aside>
               </ResizablePanel>
-              <ResizableHandle withHandle />
+              <ResizableHandle withHandle={!isMobile} />
             </>
           )}
 
           <ResizablePanel
             defaultSize={isMobile ? (metricsOpen ? 44 : 60) : metricsOpen ? 46 : 65}
             minSize={isMobile ? 30 : 28}
-            className={isMobile ? "min-h-0 overflow-y-auto overscroll-contain" : "min-h-0 overflow-y-auto"}
+            className={isMobile ? "min-h-[72dvh] overflow-y-auto" : "min-h-0 overflow-y-auto"}
+            style={isMobile ? { overflow: "visible" } : undefined}
           >
             {/* PDF Viewer / Upload */}
-            <div className={`${isMobile ? "h-full" : "h-full"} flex flex-col min-w-0 bg-cream ${isMobile ? "border-b border-border" : "border-r border-border"}`}>
-=======
-          </aside>
-        )}
-
-        {/* PDF Viewer / Upload */}
-        <div className="flex-1 flex flex-col border-r border-border min-w-0 bg-cream">
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
+            <div className={`${isMobile ? "h-auto" : "h-full"} flex flex-col min-w-0 bg-cream ${isMobile ? "border-b border-border" : "border-r border-border"}`}>
           {!file || !pdfUrl ? (
             <div className="flex-1 flex items-center justify-center p-10">
               <label
@@ -1832,12 +1595,9 @@ const Dashboard = () => {
                     className="text-xs"
                     onClick={() => {
                       setFile(null);
-<<<<<<< HEAD
                       setCurrentMatterId(null);
                       autosaveMatterIdRef.current = null;
                       setMessages([]);
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
                       setDragging(false);
                     }}
                   >
@@ -1846,17 +1606,13 @@ const Dashboard = () => {
                 </div>
               </div>
 
-<<<<<<< HEAD
               <div
                 className={
                   isMobile
-                    ? "flex-1 min-h-0 bg-cream p-4"
+                    ? "bg-cream p-4 h-[72dvh] min-h-[72dvh]"
                     : "flex-1 bg-cream p-4"
                 }
               >
-=======
-              <div className="flex-1 bg-cream p-4">
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
                 <div className="w-full h-full rounded-xl overflow-hidden border border-border/70 shadow-sm bg-white">
                   <iframe
                     key={pdfUrl + (activePage ?? "")}
@@ -1868,21 +1624,21 @@ const Dashboard = () => {
               </div>
             </>
           )}
-<<<<<<< HEAD
             </div>
           </ResizablePanel>
 
-          <ResizableHandle withHandle />
+          <ResizableHandle withHandle={!isMobile} />
 
           <ResizablePanel
             defaultSize={isMobile ? (metricsOpen ? 34 : 40) : metricsOpen ? 30 : 35}
             minSize={isMobile ? 30 : 22}
             maxSize={isMobile ? 65 : 50}
-            className={isMobile ? "min-h-0 overflow-hidden overscroll-contain" : "min-h-0 overflow-y-auto"}
+            className={isMobile ? "min-h-[95dvh] overflow-visible" : "min-h-0"}
+            style={isMobile ? { overflow: "visible" } : undefined}
           >
             {/* Chat Panel */}
             <div
-              className={`${isMobile ? "h-full min-h-0" : "h-full min-h-0"} flex flex-col bg-card ${isMobile ? "border-t border-border" : "border-l border-border"}`}
+              className={`h-full min-h-0 flex flex-col bg-card ${isMobile ? "border-t border-border pb-28" : "border-l border-border"}`}
             >
               <div className="p-4 border-b border-border">
                 <div className="flex items-center justify-between gap-2">
@@ -1974,7 +1730,7 @@ const Dashboard = () => {
 
                 <div
                   ref={messagesViewportRef}
-                  className={`flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 space-y-4 ${isMobile ? "pb-24" : ""}`}
+                  className={`flex-1 overflow-y-auto overscroll-contain p-4 space-y-4 ${isMobile ? "min-h-[56dvh] pb-24" : "min-h-0"}`}
                 >
                   {/* System message */}
                   <Card className="p-4 bg-muted/50 border-border">
@@ -2022,7 +1778,7 @@ const Dashboard = () => {
                 <div
                   className={
                     isMobile
-                      ? "mt-auto z-20 border-t border-border p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] space-y-2 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85"
+                      ? "sticky bottom-0 z-20 border-t border-border p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] space-y-2 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85"
                       : "border-t border-border p-3 space-y-2 bg-card"
                   }
                 >
@@ -2056,112 +1812,6 @@ const Dashboard = () => {
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
-=======
-        </div>
-
-        {/* Chat Panel */}
-        <div className="w-[420px] flex flex-col bg-card shrink-0 border-l border-border">
-          <div className="p-4 border-b border-border">
-            <h3 className="font-serif font-bold text-foreground text-sm">AI Legal Assistant</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">Grounded answers with source citations</p>
-          </div>
-
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Insight cards + messages scroll independently */}
-            <div className="p-4 border-b border-border bg-card">
-              <div className="grid grid-cols-2 gap-3">
-                <InsightCard
-                  label="Governing Law"
-                  value={metrics.governingLaw}
-                  placeholder="Not detected yet"
-                />
-                <InsightCard
-                  label="Key Parties"
-                  value={metrics.keyParties}
-                  placeholder="Parties not detected"
-                />
-                <InsightCard
-                  label="Termination Notice"
-                  value={metrics.terminationNotice}
-                  placeholder="No notice period found"
-                />
-                <InsightCard
-                  label="Liability Cap"
-                  value={metrics.liabilityCap}
-                  placeholder="No cap language detected"
-                />
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {/* System message */}
-              <Card className="p-4 bg-muted/50 border-border">
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Upload a legal document to begin. I&apos;ll analyze its contents and answer your questions with precise <span className="text-gold font-medium">[Page X]</span> citations.
-                </p>
-              </Card>
-
-              {file && (
-                <Card className="p-4 bg-primary/5 border-gold/20">
-                  <p className="text-sm text-foreground leading-relaxed">
-                    <span className="font-semibold">Document loaded:</span> {file.name}. You can ask about clauses, risks, timelines, or run quick actions in the sidebar.
-                  </p>
-                </Card>
-              )}
-
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}
-                >
-                  <Card
-                    className={
-                      msg.role === "user"
-                        ? "max-w-[85%] p-3 bg-primary text-primary-foreground"
-                        : "max-w-[85%] p-3 bg-muted/60"
-                    }
-                  >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
-                  </Card>
-                </div>
-              ))}
-
-              {answering && (
-                <p className="text-xs text-muted-foreground italic px-1">Analyzing the document…</p>
-              )}
-            </div>
-
-            {/* Chat input + export */}
-            <div className="border-t border-border p-3 space-y-2">
-              <form
-                onSubmit={handleChatSubmit}
-                className="flex gap-2"
-              >
-                <Input
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  placeholder={file ? "Ask a question about this document..." : "Upload a PDF first..."}
-                  disabled={!file}
-                  className="flex-1"
-                />
-                <Button type="submit" size="icon" disabled={!file || !chatInput.trim() || answering} className="bg-primary text-primary-foreground hover:bg-navy-light">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </form>
-              <div className="flex justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={!messages.length}
-                  onClick={handleDownloadAnalysis}
-                >
-                  Download Analysis (Markdown)
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       </div>
     </div>
   );
@@ -2230,7 +1880,6 @@ const InsightCard = ({
   </Card>
 );
 
-<<<<<<< HEAD
 const TacticalTimeline = ({
   events,
   activeId,
@@ -2300,6 +1949,4 @@ const AssistantMessage = ({ content }: { content: string }) => (
   </div>
 );
 
-=======
->>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 export default Dashboard;
