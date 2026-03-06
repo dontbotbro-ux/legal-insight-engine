@@ -37,6 +37,7 @@ WHEN TO USE WHICH KNOWLEDGE
 If the document context is clearly irrelevant to the question, do not force it in.
 If the question cannot be answered from the document where it should be, 
 be explicit about what is and is not supported by the PDF.
+<<<<<<< HEAD
 
 OUTPUT STYLE REQUIREMENTS
 - Write in a professional legal-work-product style suitable for attorneys and clients.
@@ -45,6 +46,8 @@ OUTPUT STYLE REQUIREMENTS
 - Avoid decorative markdown.
 - Do not output raw markdown syntax for emphasis (for example **bold** markers).
 - If a table is useful, provide a properly structured markdown table with clear headers.
+=======
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 `.trim();
 
 export type HybridChatMessage = {
@@ -52,6 +55,7 @@ export type HybridChatMessage = {
   content: string;
 };
 
+<<<<<<< HEAD
 const MAX_HISTORY_MESSAGES = 8;
 const MAX_MESSAGE_CHARS = 1200;
 const MAX_DOC_CONTEXT_CHARS = 8000;
@@ -176,6 +180,8 @@ const parseRetryAfter = (message: string): string | null => {
   return retryMatch?.[1] ?? null;
 };
 
+=======
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 export async function getHybridAnswer(params: {
   history: HybridChatMessage[];
   pdfText?: string;
@@ -185,6 +191,7 @@ export async function getHybridAnswer(params: {
     return "The AI backend is not configured (missing Groq/OpenAI API key).";
   }
 
+<<<<<<< HEAD
   const compactedHistory = compactHistory(params.history);
   const latestUserPrompt = [...compactedHistory].reverse().find((m) => m.role === "user")?.content;
   const docContext = compactDocumentContext(params.pdfText, latestUserPrompt);
@@ -194,6 +201,27 @@ export async function getHybridAnswer(params: {
     history: compactedHistory,
     docContext,
   });
+=======
+  const payload = {
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      ...(params.pdfText
+        ? [
+            {
+              role: "system" as const,
+              content: `DOCUMENT CONTEXT (verbatim text extracted from the user's PDF):\n\n${params.pdfText}`,
+            },
+          ]
+        : []),
+      ...params.history.map((m) => ({
+        role: m.role,
+        content: m.content,
+      })),
+    ],
+    temperature: 0.2,
+  };
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
   try {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -207,17 +235,25 @@ export async function getHybridAnswer(params: {
 
     if (!res.ok) {
       let details = "";
+<<<<<<< HEAD
       let detailMessage = "";
       try {
         const errJson = (await res.json()) as { error?: { message?: string; type?: string } };
         if (errJson?.error?.message) {
           detailMessage = errJson.error.message;
           details = ` (${detailMessage})`;
+=======
+      try {
+        const errJson = (await res.json()) as { error?: { message?: string; type?: string } };
+        if (errJson?.error?.message) {
+          details = ` (${errJson.error.message})`;
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
         }
       } catch {
         // ignore JSON parse errors, fall back to status text
       }
 
+<<<<<<< HEAD
       if (res.status === 413) {
         return "Your request is too large for the current model limits. Please ask a narrower question (for example, one clause, one section, or one date range).";
       }
@@ -263,6 +299,8 @@ export async function getHybridAnswer(params: {
           : "Daily AI quota reached. Please wait for reset, reduce prompt size, or upgrade the Groq billing tier.";
       }
 
+=======
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
       return `The AI service returned an error (status ${res.status}${details}).`;
     }
 
@@ -280,3 +318,7 @@ export async function getHybridAnswer(params: {
     return "I couldn't reach the AI service (network error). Please check your connection and try again.";
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c

@@ -1,6 +1,7 @@
 import * as React from "react";
 
 const MOBILE_BREAKPOINT = 768;
+<<<<<<< HEAD
 const VIEW_MODE_STORAGE_KEY = "lawyerbot:view-mode";
 const VIEW_MODE_EVENT = "lawyerbot:view-mode-change";
 
@@ -59,4 +60,21 @@ export function useViewportMode() {
 export function useIsMobile() {
   const { isMobile } = useViewportMode();
   return isMobile;
+=======
+
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
+
+  React.useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const onChange = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+    mql.addEventListener("change", onChange);
+    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return !!isMobile;
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 }

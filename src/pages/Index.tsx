@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Scale, FileText, MessageSquare, Shield, ArrowRight, Zap, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import { useAuth } from "@/lib/auth";
+=======
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
 
 const features = [
   {
@@ -24,18 +27,26 @@ const features = [
 ];
 
 const Index = () => {
+<<<<<<< HEAD
   const { user, signOut } = useAuth();
 
+=======
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
   return (
     <div className="min-h-screen bg-background">
       {/* Nav */}
       <nav className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
+<<<<<<< HEAD
         <div className="container h-16 flex items-center gap-3 min-w-0">
           <div className="shrink-0">
+=======
+        <div className="container flex h-16 items-center justify-between">
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
           <Link to="/" className="flex items-center gap-2">
             <Scale className="h-6 w-6 text-gold" />
             <span className="font-serif text-xl font-bold text-foreground">LawyerBot</span>
           </Link>
+<<<<<<< HEAD
           </div>
           <div className="min-w-0 flex-1 overflow-x-auto">
             <div className="flex items-center gap-4 w-max ml-auto pr-1">
@@ -52,6 +63,17 @@ const Index = () => {
               </Button>
             )}
                       </div>
+=======
+          <div className="flex items-center gap-4">
+            <Link to="/dashboard">
+              <Button variant="outline" size="sm">Dashboard</Button>
+            </Link>
+            <Link to="/dashboard">
+              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-navy-light">
+                Get Started
+              </Button>
+            </Link>
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
           </div>
         </div>
       </nav>
@@ -86,11 +108,15 @@ const Index = () => {
                   Start Analyzing <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
+<<<<<<< HEAD
               <Button
                 size="lg"
                 variant="outline"
                 className="bg-transparent border-primary-foreground/35 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
+=======
+              <Button size="lg" variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
+>>>>>>> f3f772e51a1bb0edb326720cb816f9bf0af3f95c
                 <BookOpen className="mr-2 h-4 w-4" /> View Demo
               </Button>
             </div>
